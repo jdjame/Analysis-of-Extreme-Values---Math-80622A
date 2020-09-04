@@ -1,0 +1,227 @@
+\documentclass{article}
+
+%install your packages here 
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{setspace}
+\usepackage{cancel}
+\usepackage{bbm}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{diagbox}
+\usepackage{ tipa }
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usetikzlibrary{arrows, calc, patterns, shapes}
+  \pgfplotsset{compat=1.15}
+\renewcommand{\baselinestretch}{1.25}
+\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
+
+%theorems
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newtheorem{example}{Example}[section]
+
+%write short hand notes here 
+%standard stats
+\def\E{\mathbb{E}}
+\def\l{\ell}
+\def\xs{\{x_1, \hdots, x_n\}}
+\def\Xs{\{X_1, \hdots, X_n\}}
+
+%standard cal
+\def\j{\mathcal{J}}
+\def\sumn{\sum^n_{i=1}}
+\def\inv{^{-1}}
+\def\fish{\mathcal{I}}
+
+%symbols
+\newcommand{\dotrel}[1]{\mathrel{\dot{#1}}}
+
+
+
+\title{Math 806222 - Analysis of Extreme Values}
+\author{Jean }
+\date{Fall 2020}
+
+\begin{document}
+%makes the title and initial page
+\maketitle
+\tableofcontents{}
+\pagebreak
+
+\section{Introduction}
+\subsection{Motivation}
+This class has for focus the analysis of extreme values. This is not to be confused with extreme value theory. Theorems, lemmas, and concepts in this course will be defined and applied but not necessarily fleshed out or proved. These details can be found in the supplementary suggested readings. The tools from this class can be applied to finance, economics and financial engineering.
+\subsection{Modeling}
+\begin{definition}[Statistical Modeling] The use of sample data to make inferences of the probability structure of the population from which the data arose is referred to as \textbf{statistical modeling}.
+\end{definition}
+Given $\xs$ as independent (but not necessarily identically distributed) realisations/observations from a population of interest, in order to make any inference on these observations, we must first estimate the distribution. There are two methods for distribution estimation: \textbf{parametric modeling}, and \textbf{non-parametric modeling}. As we will see, the parametric approach is more suitable for extreme value analyses while the non-parametric method is only useful to capture some dependency issues.
+
+\section{Parametric Modeling}
+There are three steps to parametric modeling:
+\begin{enumerate}
+    \item Choosing a family of models within which the distribution of the data is assumed to lie
+    \item Finding the family member from (1) that best corresponds to the data at hand
+    \begin{enumerate}
+        \item Parameter estimation
+        \item Confidence interval for estimates
+    \end{enumerate}
+    \item Model diagnostics and evaluation
+\end{enumerate}
+
+\subsection{Choosing a Family}
+Once we choose a family, we assume, for the rest of our parametric modeling, that the chose family was correct. It is important to note that once we have chosen, there is no way to correct for having chosen the wrong family. The choice of family is made based on:
+\begin{itemize}
+    \item \textbf{Physical Grounds:} what the process that sourced our data actually entails. (i.e. if we were observing coin flips we would use Binomial, if we were observing counts we would use Poisson).
+    \item \textbf{Empirical Grounds:} what the exploratory analysis shows (i.e. if $\bar{x}\approx s$ then we might want to use an exponential family).
+    \item \textbf{Limit Laws:} using an approximate model (i.e. Central Limit Theorem)
+\end{itemize}
+
+\subsection{Parameter Estimation}
+Let $\xs$ be independent observations of random variables with a probability density function that is in a known familly of functions:
+\[\mathcal{F} = \{f(x,\theta); \theta\in\Theta \} \]
+with $\theta$ as either a scalar or a $d$-dimensional vector. Let $\theta_0$ be the true value of $\theta$ that generated our observed data. To estimate this unknown parameter, we can use any of the following:
+\begin{itemize}
+    \item Maximum likelihood estimation
+    \item Method of moments
+    \item Probability weighted methods
+    \item Bayesian methods
+    \item Robust methods of estimation
+\end{itemize}
+
+\subsubsection{Brief Review of Maximum Likelihood Estimation}
+\begin{definition}[Likelihood Function] The probability of the observed data as a function of an unknown parameter $\theta$ is called the \textbf{likelihood function}. Assuming the observations are independent, the likelihood function is
+\[\mathcal{L}(\theta)=\prod_{i=1}^n f_i(x_i; \theta)\]
+with $f_i$ being the pdf/pmf of the i$^{th}$ observation. In practice, since the $\log$ function is monotonically increasing, maximizing the likelihood is equivalent to maximizing the log-likelihood. So we instead maximize 
+\[\l(\theta)= \log(\mathcal{L}(\theta))= \sumn \log(f_i(x_i;\theta))\]
+
+The maximum likelihood estimator $\hat{\theta}_0$ is defined by the value of $\theta$ that maximizes $\l(\theta)$. To get this, we must solve the equation below for $\theta$:
+\[\frac{\partial}{\partial \theta} \l(\theta)=0\]
+which can be done by hand or using the \texttt{optim} function from \texttt{R}.
+\end{definition}
+
+\subsection{Confidence Intervals}
+Once we have estimated our parameter $\theta$, we need to build confidence intervals for the true parameter in order to evaluate the accuracy of our estimate.
+
+\begin{definition}[Expected Information Matrix] The \textbf{expected information matrix}, also known as the \textbf{Fisher information matrix} measures the expected curvature of the log-likelihood and has information about the variability of estimated parameters. Assuming $\theta$ is $d$-dimensional, the EIM is represented by 
+\[\fish_E(\theta)= \begin{bmatrix}e_{11}(\theta) &\hdots &\hdots & e_{1d}(\theta)\\
+\vdots& \ddots & & \vdots\\
+\vdots& &\ddots & \vdots\\
+e_{d1}(\theta)& \hdots & \hdots& e_{dd}(\theta)\\
+\end{bmatrix}\]
+Where 
+\[e_{ij}(\theta)=\E\bigg\{- \frac{\partial^2}{\partial \theta_i\partial\theta_j}\l(\theta) \bigg\}\]
+\end{definition}
+
+
+\begin{definition}[Observed Information Matrix]
+This is an approximation of the expected information matrix. Since $\theta$ is rarely known, in practice, we use the \textbf{observed information matrix}:
+\[\fish_O(\theta)= 
+\begin{bmatrix}-\frac{\partial^2}{\partial \theta_1^2}\l(\theta)  &\hdots &\hdots & -\frac{\partial^2}{\partial \theta_1\partial\theta_d}\l(\theta) \\
+\vdots& \ddots & & \vdots\\
+\vdots& &\ddots &\vdots \\
+-\frac{\partial^2}{\partial \theta_d\partial\theta_1}\l(\theta) & \hdots & \hdots& -\frac{\partial^2}{\partial \theta_d^2}\l(\theta) \\
+\end{bmatrix}\]
+This can be manually calculated or retrieved from the \texttt{optim} function in \texttt{R}.
+\end{definition}
+
+\begin{theorem}
+Under suitable regularity conditions, for large $n$, 
+\[\hat{\theta}_0 \dotrel{\sim} \textit{MVN}\Big(\theta_0, \fish_{E}(\theta_0)\inv \Big)\]
+Where $\dotrel{\sim}$ means ``approximately distributed as". If $\theta$ is multidimensional, we can break this down. First, we denote $\fish_{E}(\theta_0)\inv$ as $\Psi_{i,j}$. Then, for all $\theta_i$ in $\theta_0=(\theta_1,\hdots, \theta_d)$, we have 
+\[\hat\theta_i\dotrel{\sim} N(\theta_i, \Psi_{ii})\]
+This can be used to build confidence intervals for $\theta_i$. Note that in practice, $\fish_O(\hat{\theta})$ is used instead of $\fish_E(\theta_0)$.
+
+This theorem holds when we have many observations (large $n$). In many (most) extreme values problems, by the very nature of extreme value statistics, we simply do not have enough samples to apply Theorem 1. Additionally, for some extreme value problems, the regularity conditions that Theorem 1 assumes are not satisfied.
+\end{theorem}
+\begin{theorem}
+Let $\phi=g(\theta)$ where $g$ is a scalar function. If $\hat{\theta}_0$ is the maximum likelihood estimator (MLE) for $\theta_0$, then, the MLE for $\phi$ is $\hat{\phi}_0=g(\hat{\theta}_0)$
+\end{theorem}
+
+\begin{theorem}As above, let $\phi=g(\theta)$. Furthermore, let $\hat{\theta}_0$ be the large sample MLE of the $d$-dimensional parameter $\theta_0$ with approximate variance-covariance matrix $V_{\theta}$. Then, it follows that
+
+\[\hat{\phi}_0\dotrel{\sim} N(\phi_0, V_\phi)\]
+where 
+\[V_\phi= \nabla \phi^T V_\theta\nabla \phi\]
+and
+\[\nabla\phi=\bigg[ \frac{\partial \phi}{\partial\theta_1}, \hdots,\frac{\partial \phi}{\partial\theta_d} \bigg] \hspace{.3cm} \text{evaluated at }\hat{\theta}_0\]
+computing an estimate of the variance of $\hat{\phi}_0$ using $V_{\theta}$ is known as the \textbf{delta method}
+\end{theorem}
+\subsubsection{Deviance}
+Another method of creating confidence intervals is through the use of the \textbf{deviance function}:
+\[D(\theta)= 2\{ \underbrace{\l(\hat{\theta}_0)}_{\text{largest likelihood}} - \underbrace{\l(\theta)}_{\text{likelihood at some other $\theta$}}\}\]
+Once we have the deviance function, a natural criterion for a confidence region using a threshold $c$ is to define the region as
+\[CR=\{\theta| D(\theta)\leq c\}\]
+
+\begin{theorem}For large $n$, under suitable regularity conditions, 
+\[D(\theta_0)\dotrel{\sim} \chi^2_d\]
+From this theorem, it follows that a $(1-\alpha)100\%$ confidence interval for $\theta_0$ is given as 
+\[C_\alpha= \{\theta| D(\theta)\leq \chi_{\alpha,d}^2\}\]
+where is the upper $\alpha$-quantile of a $\chi^2$ distribution with $d$ degrees of freedom. This method of creating confidence intervals is usually more accurate then Theorem 1.
+\end{theorem}
+Since Theorem 4 often outperforms Theorem 1, it is of interest to see if we can apply a similar method to get confidence intervals for individual $\theta_i$. To do this, we will need one more tool.
+\begin{definition}[Profile Likelihood]
+Let $\theta_{-i}$ denote all the vector components of $\theta$ except $\theta_i$. Then, the \textbf{profile likelihood}(PLL) for $\theta_i$ is defoned as 
+\[\l_p(\theta_i)= \max_{\theta_{-i}}\l(\theta_i, \theta_{-i})\]
+This means that for each value $\theta_i$, the PLL is the maximized log likelihood over all other ($d-1$) components of $\theta$.
+\end{definition}
+
+\begin{theorem}For large $n$, under suitable regularity conditions, we have the ``profile deviance":
+\[D_p(\theta_i)= 2 \{ \l(\hat{\theta}_0) - \l_p(\theta_i)\}\dotrel{\sim} \chi^2_1\]
+From this, it follows that a $(1-\alpha)100\%$ confidence interval for $\theta_i$ is
+\[C_\alpha = \{\theta_i | D_p(\theta_i)\leq \chi^2_{\alpha,1}\}\]
+where $\theta_i$ in $C_\alpha$ represents possible values of the $i^{th}$ component of $\theta$ rather than the true value of the $i^{th}$ component.
+\end{theorem}
+
+\begin{definition}[Deviance Statistic]
+Theorem 5 can be used for model selection. Let $M_1$ be a model with parameter $\theta$, $M_0$ be a subset of $M_1$ where $k$ of the components of $\theta$ are constrained to 0, and let $\l_j(M_j)$ be the corresponding log-likelihood for model $j$. The \textbf{deviance statistic} is
+\[D=2\{\l(M_1) - \l(M_0)\}\]
+\end{definition}
+
+\begin{theorem}Let
+\begin{align*}
+    \mathcal{H}_0: & M_0 \text{ is valid}\\
+    \mathcal{H}_A: & M_1 \text{ is a better fit}
+\end{align*}
+We reject $\mathcal{H}_0$ in favor of $\mathcal{H}_A$ if 
+\[D=2\{\l(M_1) - \l(M_0)\}>\chi^2_{\alpha,k}\]
+\end{theorem}
+\subsection{Model diagnostics}
+Remember, nowhere in our parametric modeling have we accounted for choosing the wrong family. Here, we assess how well the model we assumed fits to the data we have. Ideally, we would use cross validation on one or more held out sets. However, since we are dealing with extreme value statistics, we will rarely have enough data to use this method. In practice, we instead evaluate the concordance between our model and the data it estimates.
+\begin{definition}[Empirical Distribution Function]
+Given an ordered sample of independent observations:
+\[x_{(1)}\leq \hdots \leq x_{(n)} \]
+from a population with \textbf{true} cumulative distribution function $F$, we define the \textbf{empirical distribution function} as
+
+\[\Tilde{F}(x)=\frac{i}{n+1} \hspace{1cm} \text{for } x_{(i)}\leq x< x_{(i+1)}\]
+\end{definition}
+Let $\hat{F}$ be an estimate for $F$ from our model. Then, it follows that $\Tilde{F}$ and $\hat{F}$ should be in agreement. In fact, there are various goodness of fit procedures based on comparisons of $\Tilde{F}$ and $\hat{F}$.
+
+\begin{definition}[P-P plot] a \textbf{probability probability plot} (pp plot) consists of the points 
+\[ \Bigg\{ \bigg(\hat{F}(x_{(i)}), \frac{i}{n+1}\bigg)| i=1, \hdots, n \Bigg\}\]
+note that this is essentially the same as plotting our estimate of $\hat{F}$ from the model against the empirical distribution function $\Tilde{F}$. The goal here is to check that the empirical distribution function is aligned with the model estimate for the distribution function while accounting for the probability scale.
+\end{definition}
+
+\begin{definition}[Q-Q plot] a \textbf{quantile quantile plot} (qq plot) consists of the points 
+\[ \Bigg\{ \bigg(\hat{F}\inv (\frac{i}{n+1}), x_{(i)}\bigg)| i=1, \hdots, n \Bigg\}\]
+
+This plot is more focused on the comparing the tail behavior of $\hat{F}$ and $\Tilde{F}$. In a qq plot, we plot the quantiles of our model estimate against the quantiles of our empirical distribution function and hope they lign up.
+\end{definition}
+When running model diagnostics, it is important to use both a pp plot and a qq plot as they give the same information but on different scales.
+\end{document}
