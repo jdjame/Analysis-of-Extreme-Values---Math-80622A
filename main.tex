@@ -177,16 +177,24 @@ where is the upper $\alpha$-quantile of a $\chi^2$ distribution with $d$ degrees
 \end{theorem}
 Since Theorem 4 often outperforms Theorem 1, it is of interest to see if we can apply a similar method to get confidence intervals for individual $\theta_i$. To do this, we will need one more tool.
 \begin{definition}[Profile Likelihood]
-Let $\theta_{-i}$ denote all the vector components of $\theta$ except $\theta_i$. Then, the \textbf{profile likelihood}(PLL) for $\theta_i$ is defoned as 
+Let $\theta_{-i}$ denote all the vector components of $\theta$ except $\theta_i$. Then, the \textbf{profile likelihood}(PLL) for $\theta_i$ is defined as 
 \[\l_p(\theta_i)= \max_{\theta_{-i}}\l(\theta_i, \theta_{-i})\]
 This means that for each value $\theta_i$, the PLL is the maximized log likelihood over all other ($d-1$) components of $\theta$.
 \end{definition}
 
-\begin{theorem}For large $n$, under suitable regularity conditions, we have the ``profile deviance":
+\begin{theorem}For large $n$, under suitable regularity conditions, we can recover the \textbf{profile deviance}:
 \[D_p(\theta_i)= 2 \{ \l(\hat{\theta}_0) - \l_p(\theta_i)\}\dotrel{\sim} \chi^2_1\]
 From this, it follows that a $(1-\alpha)100\%$ confidence interval for $\theta_i$ is
 \[C_\alpha = \{\theta_i | D_p(\theta_i)\leq \chi^2_{\alpha,1}\}\]
 where $\theta_i$ in $C_\alpha$ represents possible values of the $i^{th}$ component of $\theta$ rather than the true value of the $i^{th}$ component.
+Now, let us examine the retaining criterion in the RHS of the equation above:
+\begin{align*}
+    &D_p(\theta_i)\leq \chi_{\alpha,1}^2\\
+    &=2 \{ \l(\hat{\theta}_0) - \l_p(\theta_i)\} \leq \chi_{\alpha,1}^2\\
+    &= \l(\hat{\theta}_0) - \l_p(\theta_i) \leq \frac{\chi_{\alpha,1}^2}{2}\\
+    &= \l_p(\theta_i) \geq \l(\hat{\theta}_0) -\frac{\chi_{\alpha,1}^2}{2} \tag{*}
+\end{align*}
+In practice, we build the the PLL function $\l_p(\theta_i)$ and find the range of values $\theta_i$ such that (*) holds.
 \end{theorem}
 
 \begin{definition}[Deviance Statistic]
