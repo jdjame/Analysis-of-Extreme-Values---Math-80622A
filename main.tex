@@ -48,6 +48,8 @@
 \def\j{\mathcal{J}}
 \def\sumn{\sum^n_{i=1}}
 \def\inv{^{-1}}
+\def\w{\omega}
+\def\R{\mathbb{R}}
 \def\fish{\mathcal{I}}
 
 %symbols
@@ -232,4 +234,171 @@ note that this is essentially the same as plotting our estimate of $\hat{F}$ fro
 This plot is more focused on the comparing the tail behavior of $\hat{F}$ and $\Tilde{F}$. In a qq plot, we plot the quantiles of our model estimate against the quantiles of our empirical distribution function and hope they lign up.
 \end{definition}
 When running model diagnostics, it is important to use both a pp plot and a qq plot as they give the same information but on different scales.
+
+\section{Fundementals of Extreme Value Theory}
+Usually, we define $\Xs$ as our random values of interest measured on a time scale(i.e. daily stock, weekly rainfall, ...). These may or may not be iid observations but for now, let $\Xs$ be a sequence of iid observations with distribution function $F$. Consider the random variable
+\[M_n=\max\Xs\]
+In this section, we will focus on maxima but it is important to note that the same calculations can be done on minima (or simply changing the sign of observed values and sticking with max calculations). If $n$ is the number of observations in a year, then $M_n$ is the \textbf{annual maximum}. Furthermore, we can calculate its distribution
+\[F_{M_n}(z)=P(M_n\leq z)= \prod_{i=1}^nF_{X_i}(z)=[F(z)]^n\]
+If $F$ is known, then finding the distribution function of $M_n$ is fairly straightforward. In practice however, $F$ is not known. To find the distribution of $M_n$, we could try to find an estimate $\hat{F}$ and use it to calculate $\hat{M}_n\sim [\hat{F}]^n$ but we can see that small mistakes in the estimation of $F$ will grow into significant errors in the estimation of the distribution of $\hat{M}_n$ as $n \rightarrow \infty$. Instead, we look for approximating families to model $F^n$.
+
+Let $z_+ $ the the smallest value such that $F(z)=1$. Then, for all $z<z_+$, we have 
+\[\lim_{n\rightarrow \infty}F(z)^n=0\]
+This means that the distribution of $M^n$ \textbf{degenerates} to a point mass at $z_+$ as $n\rightarrow \infty$ . To avoid dealing with such distributions, we allow for re-normalizations of $M_n$:
+\[\frac{M_n- b_n}{a_n} \hspace{1cm} a_n>0\]
+Where the right choice of sequences $a_n$ and $b_n$ stabilize the location and scale of $M_n$ as $n$ increases.
+
+\subsection{Approximating Distributions for Maxima}
+\begin{theorem}
+Let $\w(F)=\sup\{x:F(x)<1\}=+\infty$\footnote{The cdf $F$ has a horizontal asymptote at y=1}. Furthermore, let us assume $\exists$ a constant $\alpha>0$ such that $\forall x>0$
+\[ \lim_{t\rightarrow \infty} \frac{1-F(tx)}{1-F(t)}=x^{-\alpha} \tag{$\Delta$}\]
+Here, $(\Delta)$ tells us how much probability there is in the tail and that $X$ is a \textbf{regularly varying} random variable. If the above holds, then $\exists$ a sequence $a_n>0$ such that 
+\[\lim_{n \rightarrow \infty} P\bigg( \frac{M_n}{a_n} <x \bigg)= \begin{cases}\exp (x^{-\alpha}) & x>0\\
+0 & x\leq 0
+\end{cases}\]
+and the sequence can be chosen as 
+\[ a_n=\inf \bigg\{ x:1-F(x)\leq \frac{1}{n} \bigg\}\]
+When this is the case, we say that F is \textbf{the domain of attraction of Fréchet} and we write $F\in $MDA(Fréchet).
+\end{theorem}
+
+\begin{theorem}
+Let $\w(F)$ be finite (i.e. if $F$ is uniform $\w(F)=1$). Furthermore. assume that the distribution function 
+\[F^*(x)=F\bigg(\w(F)-\frac{1}{x}\bigg) \hspace{1cm} \forall x>0 \]
+satisfies condition $(\Delta)$ from Theorem 7. Then, $\exists \{a_n\}, \{b_n\}$ such that 
+\[\lim_{n\rightarrow \infty}P \bigg[ \frac{M_n-b_n}{a_n} < x\bigg]=\begin{cases}1 & x\geq 0\\
+\exp(-x(-x)^\alpha)&x<0
+\end{cases}\]
+Where the normalizing constants can be chosen as 
+\begin{align*}
+    b_n&=\w(F)\\
+    a_n&=\w(F)- \inf\{x:1-F(x)\leq \frac{1}{n}\}
+\end{align*}
+When this is the case, we say that F is \textbf{the domain of attraction of Weibull} and we write $F\in $MDA(Weibull).
+\end{theorem}
+
+\begin{theorem}
+Assume that for some finite $a$
+\[\int_a^{\w(F)} (1-F(y))dy < \inf\]
+Then, for $x$ in the range $\inf\{x:F(x)>0\}<x<\w(F)$, we define 
+\[R(t)= (1-F(t))\inv \int_t^{\w(t)} (1-F(y))dy\]
+Finally, assume that $\forall x \in \mathbb{R}$
+\[\lim_{t\rightarrow \w(F)} \frac{1-F(t+xR(t))}{1-F(t)}\underset{\footnotemark}{=}e^{-x}\]
+Then $\exists$ sequences $\{a_n\}>0,\{b_n\}$ such that 
+\[\lim_{n\rightarrow \infty}P \bigg[ \frac{M_n-b_n}{a_n} < x\bigg]=\exp(-\exp(-x)) \hspace{0.5 cm} \forall x\in \mathbb{R}\]
+Where the normalizing constants can be chosen as 
+\begin{align*}
+    b_n&=\inf\{x:1-F(x)\leq \frac{1}{n}\}\\
+    a_n&=R(b_n)
+\end{align*}
+When this is the case, we say that F is \textbf{the domain of attraction of Gumbell} and we write $F\in $MDA(Gumbell).
+\footnotetext{this means $F$ has (light) exponential tails. This forces a restriction on the decay of the distribution}
+
+\end{theorem}
+
+Below are some notes on the last 3 theorems:
+\begin{itemize}
+    \item Theorems 7-9 exhaust all possibilities for the existence of the asymptotic distribution of maxima of iid rv (i.e. if F does not fall in any of the categories above then there are no normalizing constants that lead to a non-degenerate limit).
+    \item The choice of constants $a_n,b_n$ is not unique. Changing these will yield a family with the same $\alpha$ parameter but (perhaps) different location and scale parameters
+    \item In the past, we would choose one of the three proposed families to use to model $M_n$. Then, any inference made from this assumption would rely on the presupposition that we had made the correct choice of family. Now of course, there is a better solution.
+\end{itemize}
+
+\subsection{Generalized Extreme Value Family}
+\begin{theorem}
+If there exists sequences $\{a_n\},\{b_n\}$ such that 
+\[\lim_{n\rightarrow\infty}P \bigg[\frac{M_n-b_n}{a_n}\leq z \bigg]=G(z)\tag{$\diamond$}\]
+for a non-degenerate distribution function $G$, then $G$ is a member of the \textbf{generalized extreme value }(GEV) family and can be written as 
+\[G(z)=\exp\bigg\{ - \bigg[1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)\bigg]^{-\frac{1}{\xi}}\bigg\}\]
+defined on 
+\[\{z:\bigg[1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)\bigg]^{-\frac{1}{\xi}}>0\}\]
+Below are the parameter specifications of a GEV distribution.
+\begin{itemize}
+\item $\mu\in\R $ is a location parameter
+\item $\sigma\in\R^+$ is a scale parameter
+    \item $\xi\in \R$ is a shape parameter
+\end{itemize}
+\end{theorem}
+\subsection{Properties of GEVs}
+\subsubsection{Statistical properties}
+Let $X\sim GEV(\mu, \sigma,\xi)$, then
+\begin{align*}
+    \E(X)&=\mu+\frac{\sigma}{\xi}(g_1-1)\\
+    Var(X)&=\frac{\sigma^2}{\xi^2}(g_2-g_1)\\
+    Mode(X)&=\mu+\frac{\sigma}{\xi}[(1+\xi)^{-\xi} -1]
+\end{align*}
+Where \[g_k=\Gamma(1-k\xi)\hspace{1cm} k\in\{1,2\}\]
+and 
+\[\Gamma(x)=\int_0^{\infty}t^{x-1}e^{-t}dt\]
+\subsubsection{Analytic Properties}
+Since a $GEV$ is defined on $1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)>0$, it follows that there is an upperbound on $x$ when $\xi<0$ and a lower bound when $\xi>0$
+\[\begin{cases}
+x < \frac{\mu-\sigma}{\xi}& \xi<0\\
+x > \frac{\mu-\sigma}{\xi}& \xi>0
+\end{cases}\]
+Furthermore, assuming $(\diamond)$ holds for large enough values of $n$, we have 
+\begin{align*}
+    G(z)&\approx P \bigg[\frac{M_n-b_n}{a_n}\leq z \bigg]\\
+    \implies P(M_n\leq z)& \approx G\bigg(\frac{z-b_n}{a_n}\bigg)\\
+    &=G^*(z)
+\end{align*}
+Where $G^*$ is another member of the $GEV$ family.
+\begin{definition}[Max-stability] A distribution is said to be \textbf{max-stable} if $\forall n=\{2,3,\hdots\}$, there are constraints $\alpha_n,\beta_n$ such that 
+\[G^n(\alpha_nz+\beta_n)=G(z)\]
+Where $G^n$ is the distribution of $M_n$. This definition shows that max-stable distributions are those where the sample maxima leads to identical distribution apart from a change of scale and location. 
+
+\end{definition}
+\begin{theorem}
+A distribution is max-stable iff it is a GEV.
+\end{theorem}
+\noindent With this result, we can derive the following ``proof'' for Theorem 10. First, we know that for large enough $n$,
+\[P\bigg[\frac{M_n-b_n}{a_n}\leq z \bigg]  \approx G(z)\]
+Then, for any integer $k$, $nk$ is at least as large as $n$ so
+\[P\bigg[\frac{M_{nk}-b_{nk}}{a_{nk}}\leq z \bigg]  \approx G(z) \tag{$\clubsuit$}\]
+But since $M_nk$ is the maximum of $k$ variables having the same distribution as $M_n$, we have
+\[P\bigg[\frac{M_{nk}-b_{nk}}{a_{nk}}\leq z \bigg] =\bigg( P\bigg[\frac{M_n-b_n}{a_n}\leq z \bigg]\bigg)^k \tag{$\spadesuit$}\]
+So we have
+\begin{align*}
+    (\clubsuit)&\implies P(M_{nk}\leq z)\approx G(\frac{z-b_{nk}}{a_{nk}})\\
+    (\spadesuit)&\implies P(M_{n}\leq z)\approx G^k(\frac{z-b_n}{a_n})
+\end{align*}
+Which shows that $G$ is max-stable and therefore, a $GEV$.
+
+
+\section{Modeling Univariate Extremes}
+\subsection{Block Maxima}
+Given independent observations of $\{x_1,x_2,\hdots\}$, of data block (or separate) into sequences of observations each having length $n$ for large $n$. This generates the sequence of maxima $\{M_{n,1},\hdots,M_{n,m}\}$ to which we can fit a $GEV$. See now we split our data into maximal data and use the distribution of max-like data for interpretation. Note: the choice of block size is critical. It gives rise to the standard bias-variance trade-off we often come across in statistics. Having blocks that are too small may mean that the approximation by the limit model is likely to be poor whereas having large blocks generate few block maxima, thus leading to a large estimation variance. For this section, let us consider the maximum likelihood estimator for GEVs.
+
+Since the support of a GEV depends on the parameters, we see that it is possible to run into difficulties when making the regularity assumptions that so many of our MLE theorems depend on. For this reason, we analyse 3 cases:
+\begin{enumerate}
+    \item $\xi>-0.5$: This yields a \textbf{regula} MLE and we can make the standard normality assumptions
+    \item $-1<\xi<-0.5$: We can usually optain an MLE but these do not have the standard asymptotic properties
+    \item $\xi<-1$: MLE are likely to be unobtainable.
+\end{enumerate}
+
+Let $\{z_1,\hdots,z_m\}$ denote the block maxima assumed to be independent random variables following a GEV distribution; the MLE can be found through likelihood function:
+\[\l(\mu,\sigma,\xi)=-m\log(\sigma)-(1+\frac{1}{\xi})\sum_{i=1}^m \log[1+\xi(\frac{z_i-\mu}{\sigma})]- \sum_{i=1}^m[1+\xi(\frac{z_i-\mu}{\sigma})]^{-1/\xi}\]
+provided of course that \[1+\xi(\frac{z_i-\mu}{\sigma})>0\hspace{1cm}  i=1,2,\hdots,m\]
+Otherwise, the likelihood is 0 and he log-likelihood is $-\infty$ for that observation. It is important to note that there is no analytical solution for the MLE of a GEV. Numerical approximations must be used 
+on a re-parameterized log-likelihood to obtain the best estimates.
+
+\subsubsection{Quantiles}
+When analyzing extremal data, the quantities of interest are usually the extreme upper quantiles of the (annual) maximum distribution. To do this, we invert $G(z_p)=1-p$ to find
+\[z_p=\begin{cases} \mu=\frac{\sigma}{\xi}[1-\{-\log(1-p)\}^{-\xi}] & \xi\neq 0\\
+\mu-\sigma\log\{-\log(1-p)\}&\xi= 0
+\end{cases} \tag{**}\]
+We refer to the \textbf{return level} $z_p$ associated with the \textbf{return period} $\frac{1}{p}$. For example, if we were observing annual rain data, $z_p$ would be the amount of rain  expected to be exceeded on average once every  $\frac{1}{p}$ years. Or $z_p$ is expected to be exceeded by the annual maximum once ever  $\frac{1}{p}$ years.
+
+We can let $y_p=-\log(1-p)$ and plot $z_p$ from $(**)$ against $y_p$ on a log scale. When we do this we observe 3 distinct behaviors:
+\begin{enumerate}
+    \item $\xi=0$: the plot is linear
+    \item $\xi>0$: the plot is convex with no finite bound
+    \item $\xi<0$: the plot is concave with an asymptotic limit as $p\rightarrow 0$
+\end{enumerate}
+In practice, we want to estimate $z_p$. To do so using normality, we substitute the MLE into $(**)$ and use the delta method to obtain a 95\% confidence interval. This yields mixed results as the normal approximation for the MLE may be poor (especially $\hat{\xi},\hat{z}_p $)
+\subsubsection{Profile Likelihood}
+Instead of the delta method, we can use the profile likelihood to create our confidence interval for $Z_p$ using Theorem 4. We first, reparameterize the likelihood function using
+\[\mu=z_p+\frac{\sigma}{\xi}[1-\{-\log(1-p)\}^{-\xi}]\]
+Then, we consider the likelihood function as a function of $z_p$:
+\[l(z_p)= \max_{\xi, \sigma}\l(z_p,\xi, \sigma)\]
+
+
 \end{document}
