@@ -258,7 +258,7 @@ Here, $(\Delta)$ tells us how much probability there is in the tail and that $X$
 \end{cases}\]
 and the sequence can be chosen as 
 \[ a_n=\inf \bigg\{ x:1-F(x)\leq \frac{1}{n} \bigg\}\]
-When this is the case, we say that F is \textbf{the domain of attraction of Fréchet} and we write $F\in $MDA(Fréchet).
+When this is the case, we say that F is in \textbf{the domain of attraction of Fréchet} and we write $F\in $MDA(Fréchet).
 \end{theorem}
 
 \begin{theorem}
@@ -273,7 +273,7 @@ Where the normalizing constants can be chosen as
     b_n&=\w(F)\\
     a_n&=\w(F)- \inf\{x:1-F(x)\leq \frac{1}{n}\}
 \end{align*}
-When this is the case, we say that F is \textbf{the domain of attraction of Weibull} and we write $F\in $MDA(Weibull).
+When this is the case, we say that F is in \textbf{the domain of attraction of Weibull} and we write $F\in $MDA(Weibull).
 \end{theorem}
 
 \begin{theorem}
@@ -290,7 +290,7 @@ Where the normalizing constants can be chosen as
     b_n&=\inf\{x:1-F(x)\leq \frac{1}{n}\}\\
     a_n&=R(b_n)
 \end{align*}
-When this is the case, we say that F is \textbf{the domain of attraction of Gumbell} and we write $F\in $MDA(Gumbell).
+When this is the case, we say that F is in \textbf{the domain of attraction of Gumbell} and we write $F\in $MDA(Gumbell).
 \footnotetext{this means $F$ has (light) exponential tails. This forces a restriction on the decay of the distribution}
 
 \end{theorem}
@@ -322,7 +322,7 @@ Below are the parameter specifications of a GEV distribution.
 Let $X\sim GEV(\mu, \sigma,\xi)$, then
 \begin{align*}
     \E(X)&=\mu+\frac{\sigma}{\xi}(g_1-1)\\
-    Var(X)&=\frac{\sigma^2}{\xi^2}(g_2-g_1)\\
+    Var(X)&=\frac{\sigma^2}{\xi^2}(g_2-g_1^2)\\
     Mode(X)&=\mu+\frac{\sigma}{\xi}[(1+\xi)^{-\xi} -1]
 \end{align*}
 Where \[g_k=\Gamma(1-k\xi)\hspace{1cm} k\in\{1,2\}\]
@@ -331,8 +331,8 @@ and
 \subsubsection{Analytic Properties}
 Since a $GEV$ is defined on $1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)>0$, it follows that there is an upperbound on $x$ when $\xi<0$ and a lower bound when $\xi>0$
 \[\begin{cases}
-x < \frac{\mu-\sigma}{\xi}& \xi<0\\
-x > \frac{\mu-\sigma}{\xi}& \xi>0
+x < \frac{\mu-\sigma}{\xi}& \text{if }\xi<0\\
+x > \frac{\mu-\sigma}{\xi}& \text{if }\xi>0
 \end{cases}\]
 Furthermore, assuming $(\diamond)$ holds for large enough values of $n$, we have 
 \begin{align*}
@@ -369,7 +369,7 @@ Given independent observations of $\{x_1,x_2,\hdots\}$, of data block (or separa
 
 Since the support of a GEV depends on the parameters, we see that it is possible to run into difficulties when making the regularity assumptions that so many of our MLE theorems depend on. For this reason, we analyse 3 cases:
 \begin{enumerate}
-    \item $\xi>-0.5$: This yields a \textbf{regula} MLE and we can make the standard normality assumptions
+    \item $\xi>-0.5$: This yields a \textbf{regular} MLE and we can make the standard normality assumptions
     \item $-1<\xi<-0.5$: We can usually optain an MLE but these do not have the standard asymptotic properties
     \item $\xi<-1$: MLE are likely to be unobtainable.
 \end{enumerate}
@@ -377,12 +377,12 @@ Since the support of a GEV depends on the parameters, we see that it is possible
 Let $\{z_1,\hdots,z_m\}$ denote the block maxima assumed to be independent random variables following a GEV distribution; the MLE can be found through likelihood function:
 \[\l(\mu,\sigma,\xi)=-m\log(\sigma)-(1+\frac{1}{\xi})\sum_{i=1}^m \log[1+\xi(\frac{z_i-\mu}{\sigma})]- \sum_{i=1}^m[1+\xi(\frac{z_i-\mu}{\sigma})]^{-1/\xi}\]
 provided of course that \[1+\xi(\frac{z_i-\mu}{\sigma})>0\hspace{1cm}  i=1,2,\hdots,m\]
-Otherwise, the likelihood is 0 and he log-likelihood is $-\infty$ for that observation. It is important to note that there is no analytical solution for the MLE of a GEV. Numerical approximations must be used 
+Otherwise, the likelihood is 0 and the log-likelihood is $-\infty$ for that observation. It is important to note that there is no analytical solution for the MLE of a GEV. Numerical approximations must be used 
 on a re-parameterized log-likelihood to obtain the best estimates.
 
 \subsubsection{Quantiles}
-When analyzing extremal data, the quantities of interest are usually the extreme upper quantiles of the (annual) maximum distribution. To do this, we invert $G(z_p)=1-p$ to find
-\[z_p=\begin{cases} \mu=\frac{\sigma}{\xi}[1-\{-\log(1-p)\}^{-\xi}] & \xi\neq 0\\
+When analyzing extreme data, the quantities of interest are usually the extreme upper quantiles of the (annual) maximum distribution. To do this, we invert $G(z_p)=1-p$ to find
+\[z_p=\begin{cases} \mu-\frac{\sigma}{\xi}[1-\{-\log(1-p)\}^{-\xi}] & \xi\neq 0\\
 \mu-\sigma\log\{-\log(1-p)\}&\xi= 0
 \end{cases} \tag{**}\]
 We refer to the \textbf{return level} $z_p$ associated with the \textbf{return period} $\frac{1}{p}$. For example, if we were observing annual rain data, $z_p$ would be the amount of rain  expected to be exceeded on average once every  $\frac{1}{p}$ years. Or $z_p$ is expected to be exceeded by the annual maximum once ever  $\frac{1}{p}$ years.
@@ -400,5 +400,324 @@ Instead of the delta method, we can use the profile likelihood to create our con
 Then, we consider the likelihood function as a function of $z_p$:
 \[l(z_p)= \max_{\xi, \sigma}\l(z_p,\xi, \sigma)\]
 
+\subsection{$r$ Largest Statistics}
+The next approach to building models for univariate extremes focuses on applying what we have learned from the block maxima approach to more observations of data. Let $\Xs$ be a sequence of iid random variables. Furthermore, let $M_n^{(k)}$ be the $k^{th}$ largest observation from said sequence.
+\begin{theorem}
+If there exist sequences $\{a_n\}, \{b_n\}$ such that 
+\[\lim_{n\rightarrow \infty} P \bigg[ \frac{M_n-b_n}{a_n}\leq z \bigg]= G(z)\]
+For some non degenerate distribution function $G$\footnote{By theorem 10, $G$ is a GEV}. Then, for a fixed value $k$,
+\[\lim_{n\rightarrow \infty} P \bigg[ \frac{M_n^{(k)}-b_n}{a_n}\leq z \bigg]= G_k(z)\]
+on $\{z:1+\xi(z-\mu)/\sigma > 0\}$, where
 
+\[G_k(z)=\exp\{-\tau(z)\}\sum_{s=0}^{k-1}\frac{\tau(z)^s}{s!} \hspace{1cm} \text{with }\tau(z)=\bigg[1+\xi\bigg(\frac{z-\mu}{\sigma}\bigg)\bigg]^{\frac{-1}{\xi}} \]
+We note that $M_n^{(k)}$ must be normalized in the same fashion as $M_n$, and shares the same GEV parameters. To model a single maximum, we can use $G_k(z)$.
+\end{theorem}
+A more interesting application of this theorem, would be to use it to augment the number of observations in our block maxima technique. Consider the vector quantity
+\[\tilde{M}_n^{(r)} = (M_n^{(1)},\hdots, M_n^{(k)})\]
+From the theorem above, we can get the approximate distribution of each of its sub components and evaluate this fit using qq and pp plots. However, we are more interested in their joint distribution $\tilde{M}_n^{(r)}$. Clearly, we cannot use the i.i.d. assumption, as the components are not independent.
+\begin{theorem}
+If there exist sequences $\{a_n\},\{b_n\}$ such that 
+\[\lim_{n\rightarrow \infty} P \bigg[ \frac{M_n-b_n}{a_n}\leq z \bigg]= G(z)\]
+For some non degenerate distribution function $G$, then, for a fixed $r$ the limiting distribution as $n \rightarrow \infty$ of
+\[\tilde{M}_n^{(r)}= \bigg(\frac{M_n^{(1)}-b_n}{a_n},\hdots, \frac{M_n^{(r)}-b_n}{a_n} \bigg)\]
+Falls within the familit having joint distribution function 
+\[f(z^{(1)}, \hdots,z^{(r)}= \exp \bigg\{ -\bigg[ 1+ \xi \bigg( \frac{z^{(r)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi}\times \prod_{k=1}^r \sigma^{-1} \bigg[ 1+ \xi \bigg( \frac{z^{(k)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi-1}\bigg\} \]
+With the $z^{(l}_s$ as ordered statistics. We must also ensure that $$\bigg[ 1+ \xi \bigg( \frac{z^{(k)} -\mu }{\sigma}\bigg)\bigg] >0 \hspace{1cm} \forall k=1,\hdots,r $$
+\end{theorem}
+This theorem gives use a method to fit r-largest statistics to data. In addition to still needing to define blocks and block sizes, we must also decide what values $r$ will take on. While large values of $r$ reduce the variance or our model estimators, these are more likely to violate the asymptotic conditions of the model (as $n\rightarrow \infty$ and $r$ is fixed). The larger our value for $r$, the larger $n$ must be before the conditions hold.
+\subsection{Threshold Models}
+Let $X_1, X_2, \hdots$ be a sequence of i.i.d random variables having a marginal distribution function $F$. In this method, we do not consider the maximum from each block but rather the exceedences over some high threshold $u$. From elementary application of Baye's rule, we note that 
+\begin{align*}
+    P(X>u+y|X>u)&=\frac{P[(X>u+y)\cap (X>u)]}{P(X>u)}\\
+    &=\frac{1-F(u+y)}{1-F(u)} \hspace{1cm} y>0
+\end{align*}
+This probability can be seen as calculating the probability that we exceed threshold $u$ by $y$ given/knowing that we exceed threshold $u$. Of course, if $F$ is known, then so is the distribution of the threshold exceedences. As with $F^n$, we aim to have an asymptotic approximation for $P(X>u+y|X>u)$ as $u \rightarrow \infty$.
+\begin{theorem}
+Let $X_1,X_2,\hdots$ be a sequence of i.i.d. random variables with distribution function $F$ such that $F\in MDA(GEV(\mu,\sigma, \xi))$. Then, for large enough $u$,
+\[F_u(y)= P(X-u>y|X>u)= 1-\bigg(1+\frac{\xi y}{\sigma^*} \bigg)^{-1/\xi}\]
+where $y>0$, $1+\frac{\xi y}{\sigma^*} >0$, and $\sigma^*= \sigma+ \xi(u-\mu)$.
+This limiting distribution corresponds to the generalized Pareto distribution. Below are the summary statistics for a $X\sim GP(\sigma, \xi)$ rv:
+\begin{align*}
+    \E(X)&=\frac{\sigma}{1-\xi} &\xi<1\\
+    Var(X)&= \frac{\sigma^2}{(1-\xi)^2(1-2\xi)}&\xi<1/2
+\end{align*}
+\end{theorem}
+When $\xi>0$, then the $GP$ is defined on $[0,\infty)$; when $\xi<0$, then the $GP$ is defined on $[0,\frac{-\sigma}{\xi})$. Similarly to GEVs, the $\xi$ parameter in a GP is the denominating parameter. With $\xi<0$ the distribution of excess has an upper bound of $u- \tilde{\sigma}/\xi$. Inversely, with $\xi>0$ the distribution of excess has no upper limit. We interpret $xi=0$ to be the limiting form of the distribution resulting in an exponential distribution:
+\[H(y)= 1-\exp(-y/\tilde{\sigma})\]
+Here are the steps to model extremes using threshold exceedences:
+\begin{enumerate}
+    \item Take the raw data $\xs$ and assume it to be i.i.d.
+    \item Filter the data into exceedences over a threshold $\{x_i: x_i>u\}$
+    \item Transform data points into the magnitude of the exceedences: $\{y_i =x_i-u\}$
+    \item By theorem 14, these are approximately i.i.d. and form a GP distribution.
+\end{enumerate}
+One of the more important steps is figuring out the value of our threshold $u$. If we pick a low threshold, we risk violating the asymptotic basis for our model; if we pick too high a threshold, we will have few exceedences and therefore create a high variance model.
+\subsubsection{Mean Residual Life Plots}
+To find the ideal threshold(s), we use the \textbf{mean residual life} (MRL) plots. Suppose we are given an i.i.d. series $X_1, X_2, \hdots$. Then, if GP is a valid model with a threshold $u_0$, then, by theorem 14, it is also a valid model with threshold $u>u_0$. Now, we can calculate their expected value
+\begin{align*}
+    \E[X-u|X>u]&=\frac{\sigma_u}{1-\xi}\\&= \frac{\sigma_{u_0} +\xi(u-u_0)}{1-\xi}\\&= \frac{\sigma_{u_0} -\xi u_0}{1-\xi} + \frac{\xi}{1-\xi}u
+\end{align*}
+As we can see, the mean becomes a linear function of $u$ after we have crossed the minimal valid threshold. In an MRL plot, we plot $\frac{1}{n_u}\sum_{i=1}^{n_u}$ vs $u$. Once the plot becomes a linear function of $u$, we can assume we have found the threshold. 
+
+\subsubsection{Parameter Estimation}
+Given a threshold $u$ and some data,  might wish to estimate $\sigma, \xi$. The log likelihood takes the form:
+\[l(\sigma,\xi)= -k\log(\sigma) - \bigg( 1+\frac{1}{\xi}\bigg)\sum_{i=1}^k\log\bigg( 1+\frac{\xi y_i}{\sigma}\bigg)\]
+However, it has no analytical solution and we must use numerical optimization algorithms to retrieve estimates. For $\xi=0$, we have 
+\[\l(\sigma)= -k\log(\sigma)- \frac{1}{\sigma}\sum_{i=1}^ky_i\]
+\subsubsection{Return Levels }
+As with all of our extreme value models, it is often of interest to retrieve the return levels. Assuming $X\sim GP(\sigma,\xi)$
+\begin{align*}
+    P(X>x)&= P(X>x|X>u)P(X>u)\\
+    &=\zeta_u \bigg[ 1+ \xi\frac{x-u}{\sigma} \bigg]^{-1/\xi}= \frac{1}{m}
+\end{align*}
+Where $P(X>u)=\zeta_u$. Solving the equation above to retrieve $m$ gives:
+\[x_m= u+ \frac{\sigma}{\xi}[(m\zeta_u)^\xi -1]\]
+Provided that n is large enough that $x_m>u$. If $\xi=0$, we have instead
+\[x_m= u+\sigma\log(m\zeta_u)\]
+As for before, we can plot $x_m$ vs $m$ on a logarithmic scale on observe the effects of $\xi$:
+\begin{itemize}
+    \item $\xi>0$ plot is convex
+    \item $\xi=0$ plot is linear 
+    \item $\xi<0$ plot is concave
+\end{itemize}
+We may also calculate the $N$ year return level. Given that there are $n_y$ observations per year, the $N$ year return level can be calculated as  
+\[z_N= u +\frac{\sigma}{\xi}[(n_yN\zeta_u)^\xi -1]\]
+To obtain estimates for $z_N$, we may simply use the sample parameter estimates $\hat{\sigma}, \hat{\xi}$ and $\hat{\zeta}_u= \frac{k}{n}$. Furthermore, as the number of exceedences is Binomial$(n, \zeta_u)$, we know $Var(\hat{\zeta}_u)= \frac{\hat{\zeta}_u(1-\hat{\zeta}_u)}{n}$, we can calculate a confidence interval for the $z_N$ using the delta method. Similar to what we observe with GEVs, confidence intervals for return levels from profile likelihood are more precise. From the likelihood function, we see that profiling for $\xi,\sigma$ is not difficult. Therefore, it is enough to write $\sigma$ as a function of either of these to profile $x_m$.
+\[\sigma= \frac{(x_m-u)\xi}{(m\zeta_u)^\xi-1}\]
+From here, we ignore the uncertainty due to $\zeta_u$ as it is usually small and instead focus on 
+\[\max_{\xi}l(\xi, x_m)\]
+To find our confidence interval for $x_m$
+
+
+\section{Maxima For Stationary Sequences}
+So far, we have assumed that we observe iid data. In reality, data rarely perfectly resembles iid sequences. For this reason, we must relax our constraint. We will generalize our approaches so far by seeing how they behave on data with different assumptions
+\begin{definition}[Stationary Sequence] A sequence of random variables $(X_1,X_2, \hdots)$ is said to be \textbf{strictly stationary} if 
+\[(X_{t_1},\hdots, X_{t_m}) \overset{d}{=} (X_{t_1+h},\hdots, X_{t_m+h}) \]
+For any choice of indices $t_1<\hdots<t_m$, and integer $h$. 
+\end{definition}
+\begin{definition}[Second order stationary]
+A strictly stationary sequence is said to be second order stationary if $\E[X_n]^2<\infty \forall n$, $\E[X_n]=\E[X] \forall n$, and $Cov(X_n, X_m)= Cov(X_0, X_{|m-n|})$
+\end{definition}
+Before we can apply the models derived in section 4 to stationary sequences, we must impose more conditions. 
+\begin{theorem}[$D(u_n)$ Condition]
+For integers $p,q,n$ such that 
+\[1 \leq i_1< \hdots< i_p< j_1<\hdots j_q\leq n\]
+such that $j_1- i_p=l$, we have 
+\[\bigg|P\bigg(\max_{i\in A_1\cup A_2} X_i\leq u_n\bigg)- P\bigg(\max_{i\in A_1} X_i\leq u_n\bigg)P\bigg(\max_{i\in A_2} X_i\leq u_n\bigg) \bigg|\leq \alpha(n,l)\]
+where we define the following:
+$A_1=\{i_1, \hdots, i_p\}$, $A_2=\{j_1, \hdots, j_q\}$, $alpha(n,l)\rightarrow 0$ as $n\rightarrow \infty$. 
+This essentially says that, for some split of the random variables that are fair enough apart (at least $l$), $P()-P()P()$ is close enough to 0 to not have any affect on the extremes.
+\end{theorem}
+\begin{theorem}
+Let $X_1,X_2,\hdots$ be a stationary process and $M_n= \max\{X_1, \hdots, X_n\}$. Then if there exist sequences $\{a_n>0\}$,$\{b_n\}$ such that 
+\[\lim_{n\rightarrow \infty}P\bigg( \frac{M_n-b_n}{a_n} \bigg)= G(z)\]
+where $G$ is a non degenerate distribution and the $D(u_n)$ condition is satisfied with $u_n=a_nz+b_n$, the $G$ is a GEV. The parameters of this GEV need not be the same as those of the corresponding independent sequence.
+\end{theorem}
+From this theorem, we note that the maxima of stationary processes(that follow the $D(u_n)$ condition) follows the same distributional limit of that sequences of independent random variables. While the limiting $G$ distribution might not have the same parameters as the corresponding independent sequence, we can find a way to relate the two distributions.
+\begin{theorem}
+Let $X_1, X_2, \hdots$ represent random variables from a stationary sequence and let $X^*_1, X^*_2, \hdots$ represent the associated independent sequence. If, for normalizing sequences $\{a_n > 0\}$ and
+$\{b_n\}$, where $G_1$ is a non-degenerate df, we have 
+\[\lim_{n \rightarrow \infty}P \bigg( \frac{M_n^*-b_n}{a_n} \bigg)\rightarrow G_1(z)\]
+and the $D(u_n)$ condition applies to the stationary process with $u_n= a_nx+b_n$ for each $x$ where $G(x)>0$ and if $P \bigg( \frac{M_n-b_n}{a_n} \bigg)$ converges for some values of $x$, then 
+\[\lim_{n \rightarrow \infty}P \bigg( \frac{M_n-b_n}{a_n} \bigg)\rightarrow G_2(z)\]
+and
+\[G_2(z)=G_1^\theta(z)\]
+with constant $0<\theta\leq 1$.
+
+\noindent Note that this means, given the GEV for an independent sequence $G_1\sim GEV(\mu, \sigma,\xi)$ and the proportion $\theta$, we could easily show that $G_2$ is a GEV $G_2\sim GEV(\mu^*, \sigma^*, \xi^*)$ with parameters 
+\begin{align*}
+    \mu^*&= \mu-\frac{\sigma}{\xi}(1-\theta^\xi)\\
+    \sigma^*&=\sigma\theta^\xi\\
+    \xi^*&=\xi
+\end{align*}
+\end{theorem}
+\begin{definition}[Extremal Index]
+The parameter $\theta$ that relates and the distribution of a GEV from a stationary sequence to that of its corresponding independent sequence is termed the \textbf{extremal index}.
+
+In fact, given a stationary process $X_1, X_2, \hdots$, with marginal distribution function $F$ and $\theta$ as a non negative number, where for every $\tau>0$, there exists a sequence $\{u_n\}$ such that 
+\begin{align*}
+    \lim_{n\rightarrow \infty}& n(1-F(u_n))=\tau\\
+    \lim_{n\rightarrow \infty}& P(M_n\leq u_n)= \exp(-\theta\tau)
+\end{align*}
+We again term $\theta$ to be the extremal index. This is because, for the associated independent sequence $X_1^*, X_2^*, \hdots$, we have
+\[
+\lim_{n\rightarrow\infty} P(M_n^*\leq u_n) =\lim_{n\rightarrow\infty}[1-\frac{1}{n}n(1-F(u_n))]= \exp(-\tau) \]
+We can think of $\theta$ as the reciprocal mean cluster size. Note: a series for which $\theta = 1$ means that dependence is negligible at asymptotically high levels, but not necessarily so at “extreme” levels that are relevant for any particular application.
+\end{definition}
+\begin{definition}[Condition $D^/(u_n)$]
+The condition is as follows:
+\[\lim_{k\rightarrow\infty} \limsup_{n\rightarrow \infty} n\sum_{j=2}^{[{n/k}]}P(X_1>u_n, X_j>u_n)=0\]
+We can think of $D^/(u_n)$ as an anti clustering condition. In fact, it implies 
+\[\E\bigg[ I_{\{X_i>u_n, X_j>u_n\}} \bigg] \leq [n/k] \sum_{j=1}^{[n/k]}\E [I_{\{X_i>u_n, X_j>u_n\}}] \rightarrow 0\]
+This essentially means that mean joint exceedences over $u_n$ by pairs $X_i,X_j$ are unlikely for large values of $n$.
+\end{definition}
+Immediately, we can observe that for stationary sequences that satisfy both the $D(u_n)$ and $D^/(u_n)$ conditions and where the extremal index $\theta=1$, the behavior of the stationary sequence is indistinguishable from that of the corresponding iid sequence.
+\subsection{Modeling Stationary Sequences}
+Now that we have conditions for which we can recover the distribution of maxima of stationary processes, we can edit our methods for maxima model building from section 4. 
+\subsubsection{Block Maxima}
+To use this model, we can consider the data to be a realization of a process satisfying the $D(u_n)$ condition. Therefore, it is still appropriate to model the distribution of block maxima using the $GEV$ family as before. In fact, once the $D(u_n)$ condition is satisfied, we can pretend the data is iid. However, the accuracy of the GEV family as an approximation to the distribution of block maxima is
+likely to diminish with increased level of dependence. Furthermore, the effective number of observations is reduced from $n$ to $n\theta$.
+
+\subsubsection{Threshold Models}
+For threshold models, we must make some modifications (iid vs stationary). The marginal distribution of exceedences is still GP but extremes have a tendency to cluster. Therefore, we do not have a result for the joint distribution of neighboring excesses. To solve this problem, we could consider declustering our data. The idea here is to filter out dependent observations and keep a set of threshold exceedences that are approximately independent. The steps are as follows:
+\begin{enumerate}
+    \item Using knowledge of the underlying process, define cluster exceedences
+    \item Identify maximum excess within each cluster
+    \item Assume independence of cluster maxima and model
+excesses as GP
+\end{enumerate}
+Once we do this however, we see that the results are highly dependent on cluster size. Additionally, it is important to consider the loss of information that arises from discarding all data except cluster maxima. In practice, we mitigate these errors by conducting analysis with several different thresholds and definitions of clusters. To test the stability of our model, we use estimated return levels. Since we only use one observation per cluster, the rate at which clusters occur (instead of the rate of exceedences) must be calculated. This means that the mean cluster size $\theta$ must be included when finding $m-$observation return level:
+\[x_m= u+\frac{\sigma}{\xi}[(m\zeta_u\theta)^\xi-1]\]
+Of course, we can use empirical results to get estimates for some of these parameters ($\hat{\sigma}, \hat{\xi}$ done through MLE). Let $n_c$ be the number of clusters above $u$ and let $n_u$ be the number of threshold exceedences over $u$. Then, our estimates are:
+\begin{align*}
+\hat{\zeta}&= \frac{n_u}{n} && \hat{\theta}= \frac{n_c}{n_u}\\
+\widehat{\zeta_u\theta}&=\frac{n_c}{n}
+\end{align*}
+As these are empirical estimates, there is no model to compare against. Therefore, these are very sensitive to threshold and cluster definition.
+\subsection{Estimating the Extremal Index}
+\subsubsection{Blocks Method}
+Recall from the definition of the extremal index that
+\[P(M_n\leq u_n) \approx (P(M^*_n\leq u_n))^\theta= F^{\theta n}(u_n)\]
+Provided of course the for some $\tau>0$, 
+\[n(1-F(u_n))\rightarrow \tau\]
+From these, we can surmise that
+\[\lim_{n\rightarrow \infty} \frac{\ln P(M_n\leq u_n)}{\ln nF(u_n)}= \theta\tag{\S\S}\]
+Now, we can approximate $F(u_n)$ using the empirical cdf. In fact, using the Glivenko-Cantelli theorem for stationary ergodic sequences, estimate $F(u_n)$ by $1-\frac{n_c}{n}$. It is not as straightforward to find an empirical estimator for $P(M_n\leq u_n)$. Suppose $n=r(n)k(n)$ with $k(n)$ being a slowly increasing function of $n$. The $D(u_n)$ condition implies 
+\[P(M_n\leq u_n) \approx P^k(M_r\leq u_n) \tag{\S}\]
+Using this, we divide the sample into $k$ blocks of size $r$ as below:
+\begin{align*}
+    X_1,&\hdots, X_n\\
+    X_1, \hdots X_r ;& \hdots ; X_{(k-1)r+1}, \hdots, X_{kr}
+\end{align*}
+For each block, we calculate the maximum:
+\[M_r^{(i)}= \max(X_{(i-1)r+1}, X_{ir} )\hspace{1cm} i=1,\hdots, k\]
+Using $\S$, we use these block maxima to get an approximate for the cdf of $M_n$:
+\begin{align*}
+    P(M_n\leq u_n)&= P(\max_{1\leq i \leq k} M_r^{(i)}\leq u_n)\\
+    &\approx P^k(M_n\leq u_n)\\
+    &\approx \bigg(\frac{1}{k} \sum_{i=1}^k I_{M_r^{(i)}\leq u_n}\bigg)^k\\
+    &=(1-\frac{K}{k})^k
+\end{align*}
+Where $K$ is the number of blocks with one or more exceedances over $u_n$. With this estimate, we can estimate $(\S\S)$. The first estimate is just a direct plug:
+\[\hat{\theta}_n^{(1)}= \frac{k\ln(1-K/k}{r\ln(1-n_u/n)}\]
+The second estimate comes from a Taylor series expansion of the $ln$ function:
+\[\hat{\theta}_n^{(2)}= \frac{K}{n_u}\]
+
+
+\subsubsection{Extremal Index as Reciprocal of the Mean Cluster Size}
+This interpretation of $\theta$ suggests an estimator based on the blocks method as we need only the ratio of the number of clusters of exceedances to the total number of exceedances. 
+\[\hat{\theta}_n^{(2)}= \frac{\sum_{i=1}^k I_{M_r^{(i)}>u_n}}{\sum_{i=1}^n I_{X_i>u_n}}= \frac{K}{n_u}\]
+We note that this is the same as the Taylor series approximation to $\hat{\theta}_n^{(1)}$ from the blocks method.
+\subsubsection{Runs Method}
+It can be shown that $\lim_{n\rightarrow \infty}\theta_n(m, u_n)= \theta$ where 
+\[\theta_n(m, u_n)=P(M_{2,m}\leq u_n|X_1>u_n)\]
+with $M_{i,j}= \max(X_i,\hdots, X_j)$, $m(n)$ satisfying $\lim_{n\rightarrow \infty} m/n=0$, and some more constraints on the specific growth rate.The estimator for $\theta$ therefore becomes
+\[\hat{\theta}_n^{(3)}= \frac{\sum_{i=1}^{n-r}I_{A_{i,n}}}{\sum_{i=1}^n I_{X_i>u_n}}=\frac{\sum_{i=1}^{n-r}I_{A_{i,n}}}{n_u}\]
+where 
+\[A_{i,n}= \{X_i>u_n, X_{i+1}\leq u_n, \hdots, X_{i+r}\leq u_n\}\]
+We can thus take any sequence of $r = r(n)$ consecutive observations below the threshold as separating two clusters. This means that using the runs method requires a choice for $r$.
+\subsubsection{Two-thresholds Method}
+For $i<j$, let $M_{i,j}=\max(X_i, \hdots, X_j)$ and $L_{i,j}=\min(X_i, \hdots, X_j)$ .We define the two threshold estimator for $\theta$ as 
+\[\theta_X(u, m, c) = P \bigg\{ M_{2,m}\leq u \text{ or }\bigcup_{i=2}^{m-1} T_{i,c,u}|X_1>u \bigg\}\]
+where:
+\begin{itemize}
+    \item $\omega_F<c<u<\omega^F$
+    \item $\omega_F= \inf\{x:F(x)>0\}$; $\omega^F= \sup\{x:F(x)<1\}$
+    \item m is a runs length
+    \item $T_{i,c,u}= \{c<L_{2,i-1},M_{2,i-1}<u, X_i\leq c\}$ corresponds to the event of remaining below $u$ for events $X_2, \hdots, X_{i-1}$ but dropping below $c$ at $X_i$.
+\end{itemize}
+Using the empirical counterpart of the probabilities in $\theta_X(u, m, c)$ yields an estimator of $\theta$ which
+declusters any stationary process satisfying $D(u_n)$.
+
+\subsubsection{Intervals Estimator}
+This estimator is based on the fact
+that the extremal index is related to the
+times between threshold exceedances. Suppose we observe $n_u$ exceedences of $u$ at times $1\leq S_1< \hdots < S_{u_n}<n$. We compute the exceedance times as $T_i= S_{i+1}-S_{i}$ and set 
+\[\hat{\theta}^\delta_n(u)=\frac{2(\sum_{i=1}^{n_u-1}T_i)^2}{(n_u-1)\sum_{i=1}^{n_u-1}T_i^2}\]
+and 
+\[\hat{\theta}^*_n(u)=\frac{2\{\sum_{i=1}^{n_u-1}(T_i-1)\}^2}{(n_u-1)\sum_{i=1}^{n_u-1}(T_i-1)(T_i-2)}\]
+As neither of these is guaranteed to lie in $[0,1]$, we must impose the constraint artificially:
+\[\bar{\theta}_n^I(u)=\begin{cases}
+1 \wedge \hat{\theta}^\delta_n(u)& \max\{T_1:1\leq i\leq_u-1\}\leq 2 \\
+1 \wedge \hat{\theta}^*_n(u)&\max\{T_1:1\leq i\leq_u-1\}> 2 
+\end{cases}\]
+Note that there is no need to choose an $r$ to compute $\bar{\theta}_n^I(u)$.
+\section{Modeling Non-Stationary Processes}
+In many cases, we are interested in the extremes of
+a series which is clearly non-stationary. There are three approaches to modeling the extremes of a non-stationary process:
+\begin{enumerate}
+    \item Using covariate models in the parameters of the
+limiting distribution.
+    \item EOT: use time-varying thresholds and the usual
+GP model for their exceedances.
+    \item Preprocess to model the non-stationarity in the
+body of the process and then use the standard
+methods to model the extremes of the preprocessed data
+\end{enumerate}
+
+\subsection{Covariate Models}
+In covariate models, we keep our standard extreme value models, and seek to model the non-stationarity by
+allowing parameters to vary with time and other
+covariates. Let $Z_t$ be the block maxima at tome $t$. Consider
+\[Z_t \sim GEC(\mu(t), \sigma(t), \xi(t))\]
+Here are the functions commonly used to model these time varying parameters:
+\begin{itemize}
+    \item To model \textbf{location} we usually use one of the following
+    \begin{align*}
+        \text{Linear} &&\mu(t)&=\beta_0+\beta_1t \\
+        \text{Quadratic} && \mu(t)&=\beta_0+\beta_1t+\beta_2t^2\\
+        \text{Change point model} &&\mu(t)&=\begin{cases}\mu_1 & t\leq t_0\\ \mu_2 & t> t_0
+        \end{cases}\\
+    \end{align*}
+    \item We \textbf{scale} growth by
+    \[\sigma(t)= \exp(\beta_0+\beta_1t\]
+    \item Although \textbf{shape} is hard to vary, we can make use of the change point model:
+    \[\xi(t)=\begin{cases}\xi_1 & t\leq t_0\\ \xi_2 & t> t_0\end{cases}\]
+\end{itemize}
+With $t_0$ known. In fact, we can come up with functions for any extreme value parameter. Let $\theta$ be such a parameter. We write
+\[\theta(t)= h(X^T\beta\]
+where $h$ is a specified function, $X$ is the model vector, and $\beta $ is the parameter vector. When we do this, we must be careful of the folowing issues:
+\begin{itemize}
+    \item Parameter estimation
+    \item Model Choice
+    \item Model Diagnostics
+\end{itemize}
+\subsubsection{Parameter Estimation}
+This is barely more complicated than before. Having 
+\[Z_t \sim GEV(\mu(t), \sigma(t), \xi(t))\]
+Means that our likelihood function becomes:
+\[\mathcal{L}(\beta)= \prod_{t=1}^{m} g(z_t, \mu(t), \sigma(t), \xi(t))\]
+where $\beta$ is the vector of all parameters to be
+estimated. Approximate standard errors and CI
+follow in the usual way from the observed information matrix (evaluated numerically).
+
+\subsubsection{Model Selection}
+For nested models, we can make use of the deviance statistic.
+
+\subsubsection{Model Diagnostics}
+So far(in previous model diagnostic sections), we have assumed that the model was iid to produce qq and pp plots. In the non stationary case, the lack of homogeneity in the distributional assumptions of each observation means that we will need to make some alterations. The general idea is to produce a standardized version of the data conditional on the fitted parameter values. 
+
+Recall that given a random variable and its distribution function $X\sim F_X$, it is simple to create a random variable $Y=F(X)\sim$ Uniform(0,1). From here, given the inverse cdf of a random variable $T \sim G_T$, we can compose $V=G_T^{-1}(F(X))\sim G_T$. Using this logic, we produce standard Gumbel variates. From the estimated block model  
+\[Z_t \sim GEV(\mu(t), \sigma(t), \xi(t))\]
+We create the standardized variables $\tilde{Z}_t$ through a transformation of composing the GEV distribution function with the inverse Gumbel distribution function. This yields a random variables with a Gumbel(0,1) distribution.
+\begin{align*}
+    \tilde{Z}_t&= Gumbel^{-1}(GEV_{\hat\mu,\hat\sigma,\hat\xi}(Z_t)\\
+    &= \frac{1}{\hat\xi(t)}\log\bigg[ +\hat\xi(t)\bigg( \frac{Z_t-\hat\mu(t)}{\hat\sigma(t)}\bigg) \bigg]\sim Gumbel(0,1)
+\end{align*}
+Now, we can compare the ``observed" $\tilde{z}_t$ to Gumbel(0,1) variates. as usual, we denote ordered values of $\tilde{z}_t$ as $\tilde{z}_{(1)},\hdots, \tilde{z}_{(m)}$. From these, we can create the pp plot:
+\[\bigg(\frac{i}{m+1},\exp(-\exp(-\tilde{z}_{(i)}))\bigg) \hspace{1cm} i=1,\hdots,m\]
+and the qq plot:
+\[\bigg(\tilde{z}_{(i)}, -\log(-\log(1/(m+1))\bigg)\hspace{1cm} i=1,\hdots,m\]
+
+If our model is instead measuring exceedences over a threshold such that
+\[Y_t\sim GP(\hat\sigma(t),\hat\xi(t)\]
+We standardize is to an exponential variable with
+mean equal to 1:
+\begin{align*}
+    \tilde{Z}_t&= Exp^{-1}_1(GP_{\hat\sigma, \hat\xi}(Y_t))\\
+    &=\frac{1}{\hat\xi(t)}\log\bigg[1 +\frac{\hat\xi(t)Y_t}{\hat\sigma(t)} \bigg] \sim \exp(1)
+\end{align*}
+\subsection{Time Varying Thresholds}
+An alternative approach to modeling non stationary processes would be to make use of time varying threshold. These are to be applied on a per-cae basis (i.e. different thresholds for each season). While using sophisticated time-varying threshold approaches could seem reasonable in theory, it is rarely used in practice. When using a time-varying threshold, we cannot get estimates of marginal or conditional return levels below the threshold. Furthermore, models required to correctly explain the
+non-stationarity can be shown to be less parsimonious than the preprocessing approaches discussed in the next section. Finally, it is very difficult to justify the choice of the time-varying threshold.
 \end{document}
