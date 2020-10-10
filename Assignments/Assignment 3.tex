@@ -159,15 +159,16 @@ In our analysis, we use the supplied code to transform the hourly rainfall data 
     p= 0.01 &&z_{0.01}\in [ , ] && \hat{z}_{0.01}= 
 \end{align*}
 The methods for model creation, selection, and parameter estimation are discussed in the next sections.
-\section*{Analyzing the data together}
-We begin our analysis by considering July and August rainfall data as one dataset. This is done to lend more statistical power to our models through an increased number of observations. Latter analyses will consider the data separately. From observation of the data (shown below), we will assume that the monthly maximum hourly rainfall data follows a stationary process on which we can fit a covariate GEV. If the model diagnostics suggest this assumption is flawed, we will return to preprocessing the data to get declustered data that follow the $D(u_n)$ condition. The data, now assumed to be stationary, is shown below:
+\section*{Preliminary Data Analysis}
+We begin our analysis by considering July and August rainfall data as one dataset. If the model diagnostics from considering the two months as having the same underlying process for generating rain are poor, latter analyses will consider the data separately. From observation of the data (shown below) and its corresponding ACF plot, we will assume that the monthly maximum hourly rainfall data follows a process where the $D(u_n)$ condition is held. 
 \begin{figure}[H]
 \begin{center}
 {\includegraphics[width=3in]{Assignments/a3/rain.png}}
+{\includegraphics[width=3in]{Assignments/a3/rain-acf.png}}
 \caption{Maximum monthly rain}
 \end{center}
 \end{figure}
-\noindent This decision made, we must decide which of the supplementary data we wish to include in our model. At a later point, this will be done through model selection. However, to get an intuitive feel for the data, we plot the monthly Saint Louis data against each of these covariates in turn.
+\noindent This decision made, we must decide which of the supplementary data we wish to include in our model. At a later point, this will be done through model selection. However, to get an intuitive feel for the data, we plot the monthly Saint Louis data against each of these covariates in turn. From these (shown below), we note that the effects of SOI and PDO are similar with respect to the maximum monthly rainfall. This would suggest that these are affecting the same parameter (scale). However, their effects on the monthly rainfall seems to be less than the effects of the weather. We note this as the graph of rain vs weather exhibits less of an ``even" spread. Of course all of these are just speculations which we must test in our model building process.
 \begin{figure}[H]
 \begin{center}
 {\includegraphics[width=3in]{Assignments/a3/rain-vs-soi.png}}
@@ -176,18 +177,61 @@ We begin our analysis by considering July and August rainfall data as one datase
 \caption{Maximum monthly rain plotted against potential covariates }
 \end{center}
 \end{figure}
-\section*{Work}
-Below is a complete list of models applied as well as their performance metrics (pp plots, qq plots, deviance). Models are indexed by the parameter chosen to be affected by the covariates:
+
+\section*{Model building}
+Let $\{X_t\}$ be the sequence of maximum monthly rain data. Consider the following covariate models for the location parameter:
 \begin{align*}
-    \text{Model I: }& \mu(t)=\beta_0+\beta_1\text{PDO}+\beta_2\text{SOI}+ \beta_3\text{TMP}\\
-    \text{Model II: }& \mu(t)=\beta_0+\beta_1\text{PDO}+\beta_2\text{SOI}\\
-    \text{Model III: }& \mu(t)=\beta_0+\beta_1\text{PDO}\beta_2\text{TMP}\\
-    \text{Model IV: }& \mu(t)=\beta_0+\beta_1\text{SOI}+ \beta_2\text{TMP}\\
-    \text{Model V: }& \mu(t)=\beta_0+\beta_1\text{PDO}\\
-    \text{Model VI: }& \mu(t)=\beta_0+\beta_1\text{SOI}\\
-    \text{Model VII: }& \mu(t)=\beta_0+\beta_1\text{TMP}\\
-    \text{Model VIII: }& \mu(t)=\beta_0
+    & \mu_3(t)=\beta_0+\beta_1\text{PDO}+\beta_2\text{SOI}+ \beta_3\text{TMP}\\
+    & \mu_{2PS}(t)=\beta_0+\beta_1\text{PDO}+\beta_2\text{SOI}\\
+    & \mu_{2PT}(t)=\beta_0+\beta_1\text{PDO}+\beta_2\text{TMP}\\
+    & \mu_{2ST}(t)=\beta_0+\beta_1\text{SOI}+ \beta_2\text{TMP}\\
+    & \mu_{1P}(t)=\beta_0+\beta_1\text{PDO}\\
+    & \mu_{1S}(t)=\beta_0+\beta_1\text{SOI}\\
+    & \mu_{1T}(t)=\beta_0+\beta_1\text{TMP}\\
+    & \mu_0(t)=\beta_0
 \end{align*}
+Similarly, consider the following covariate models for the scale parameter:
+
+\begin{align*}
+    & \sigma_3(t)=\exp\{\alpha_0+\alpha_1\text{PDO}+\alpha_2\text{SOI}+ \alpha_3\text{TMP}\}\\
+    & \sigma_{2PS}(t)=\exp\{\alpha_0+\alpha_1\text{PDO}+\alpha_2\text{SOI}\}\\
+    & \sigma_{2PT}(t)=\exp\{\alpha_0+\alpha_1\text{PDO}+\alpha_2\text{TMP}\}\\
+    & \sigma_{2ST}(t)=\exp\{\alpha_0+\alpha_1\text{SOI}+ \alpha_2\text{TMP}\}\\
+    & \sigma_{1P}(t)=\exp\{\alpha_0+\alpha_1\text{PDO}\}\\
+    & \sigma_{1S}(t)=\exp\{\alpha_0+\alpha_1\text{SOI}\}\\
+    & \sigma_{1T}(t)=\exp\{\alpha_0+\alpha_1\text{TMP}\}\\
+    & \sigma_0(t)=\alpha_0
+\end{align*}
+The shape parameter has been left to be modeled by a constant. To find the best model, we fit a full model
+\[X_t\sim GEV(\mu_3(t),\sigma_3(t), \xi) \]
+and compare it to smaller models using the deviance statistic as a guide to know if the nested models are an appropriate simplification of the more complex models. We will also be making use of the pp and qq plots to assess individual model performance. While this approach gives 64 models to test, we only need to test until we are satisfied with the number of included covariates and the diagnosis pp and qq plots. In fact, we build the full model (using $\mu_3, \sigma_3$) and prune it until removing any of the covariates drastically affects the model's predictive performance. Therefore, results from all 64 experiments are not included in this document.
+
+\section*{Model Evaluation}
+As mentioned in the previous section, we will be using quantile and probability plots to assess the performance of each model individually. Since the task is to find a good estimate for the maximum rainfall to prepare for floods, we will penalise models where the qq plot suggest the model will underestimate upper quantiles.
+
+\noindent First, we build the model in the table Below. The Deviance column refers to the deviance statistic between the model in question and the last pruned model. We say a model is stable when we fail to prune any of its covariates using hypothesis testing. Models that are kept after pruning are set in bold.
+\begin{center}
+    \begin{tabular}{||c||c|c|c|c||}\hline
+     Model& $\mu(t)$ & $\sigma(t)$&Log Lik.& Deviance \\\hline
+     I& $\mu_3$ & $\sigma_3$ & -205.99 & -- \\\hline
+     \textbf{II}&$\mu_3$ & $\sigma_{2PS}$ & -205.81 & -0.372  \\\hline
+     III& $\mu_3$ & $\sigma_{1S}$ & -208.03 & 4.46\\\hline
+     IV& $\mu_3$ & $\sigma_{1P}$ & -208.26 & 4.91 \\\hline
+\end{tabular}
+\end{center}
+Here we note that for a 95\% hypothesis test, we cannot reject the null hypothesis that the weather is unimportant (comparing model I and model II). However, we do see that the effects of PDO and SOI are both important as we must reject the null hypothesis when testing model II and III, and subsequently model II and IV. Next, we will do the same with the location parameter. This time, model II will serve as the base model from which we prune.
+
+\begin{center}
+    \begin{tabular}{||c||c|c|c|c||}\hline
+     Model& $\mu(t)$ & $\sigma(t)$&Log Lik.& Deviance \\\hline
+     II&$\mu_3$ & $\sigma_{2PS}$ & -205.81 & --  \\\hline
+     V& $\mu_{2PS}$ & $\sigma_{2PS}$ & -207.97 & 4.33\\\hline
+     \textbf{VI}& $\mu_{2PT}$ & $\sigma_{2PS}$ & -206.06 & 0.51 \\\hline
+     \textbf{VII}& $\mu_{1T}$ & $\sigma_{2PS}$ &  206.22 & 0.32 \\\hline
+\end{tabular}
+\end{center}
+Here instead, we note that only the temperature has a significant effect on the location parameter. This gives rise to our final model:
+\[X_t\sim GEV(\beta_0+\beta_1TMP, \exp\{\beta_0+\beta_1PDO+\beta_2SOI\}, \xi)\]
 \end{solution}
 
 \end{document}
