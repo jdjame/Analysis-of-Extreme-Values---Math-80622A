@@ -155,8 +155,8 @@ tables and figures.
 \begin{solution}
 In our analysis, we use the supplied code to transform the hourly rainfall data into the max-monthly rainfall data. As we are looking for good estimates of the upper tail, we focus on the prediction of the $95^{th}$ and $99^{th}$ quantiles of the max rainfall data ($z_{0.05},z_{0.01}$). From our investigation, we found the best estimates and their confidence intervals below:
 \begin{align*}
-    p= 0.05 &&z_{0.05}\in [ , ] && \hat{z}_{0.05}= \\
-    p= 0.01 &&z_{0.01}\in [ , ] && \hat{z}_{0.01}= 
+    p= 0.05  && \hat{z}_{0.05}=23.67 \\
+    p= 0.01  && \hat{z}_{0.01}=30.52 
 \end{align*}
 The methods for model creation, selection, and parameter estimation are discussed in the next sections.
 \section*{Preliminary Data Analysis}
@@ -209,7 +209,7 @@ and compare it to smaller models using the deviance statistic as a guide to know
 \section*{Model Evaluation}
 As mentioned in the previous section, we will be using quantile and probability plots to assess the performance of each model individually. Since the task is to find a good estimate for the maximum rainfall to prepare for floods, we will penalise models where the qq plot suggest the model will underestimate upper quantiles.
 
-\noindent First, we build the model in the table Below. The Deviance column refers to the deviance statistic between the model in question and the last pruned model. We say a model is stable when we fail to prune any of its covariates using hypothesis testing. Models that are kept after pruning are set in bold.
+\noindent First, we build the model in the table below. The Deviance column refers to the deviance statistic between the model in question and the last pruned model. We say a model is stable when we fail to prune any of its covariates using hypothesis testing. Models that are kept after pruning are set in bold.
 \begin{center}
     \begin{tabular}{||c||c|c|c|c||}\hline
      Model& $\mu(t)$ & $\sigma(t)$&Log Lik.& Deviance \\\hline
@@ -232,6 +232,15 @@ Here we note that for a 95\% hypothesis test, we cannot reject the null hypothes
 \end{center}
 Here instead, we note that only the temperature has a significant effect on the location parameter. This gives rise to our final model:
 \[X_t\sim GEV(\beta_0+\beta_1TMP, \exp\{\beta_0+\beta_1PDO+\beta_2SOI\}, \xi)\]
+From the diagnostics pp and qq plots (below), we see that although our model is not perfect, it does an adequate job of capturing the upper quantile behavior of our data. That being said, there is some evidence that the model might under-estimate the quantiles (seen from mid-quantiles in qq plot) so an application of this model might be well served to err on the side of caution when using the estimated values of $z_p$.
+\begin{figure}[H]
+\begin{center}
+{\includegraphics[width=5in]{Assignments/a3/mod7-diag.png}}
+\caption{Diagnosis plots for Model VII}
+\end{center}
+\end{figure}
+Since we used a covariate model, each of the 72 data points we have corresponds to a unique grouping of parameters $(\mu(t), \sigma(t), \xi)$. For this reason, for a given $p$, we create a list of the daily quantile $\{z_p(t)\}$ and then, use the maximum quantile in this set as our estimate. 
+\[\hat{z}_p = \max_{z}\{\hat{z}_p(t)| t=1,\hdots,72\}\]
 \end{solution}
 
 \end{document}
