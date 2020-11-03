@@ -15,6 +15,7 @@
 \usepackage{diagbox}
 \usepackage{ tipa }
 \usepackage{hyperref}
+\usepackage{float}
 \hypersetup{
     colorlinks=true,
     citecolor=black,
@@ -51,6 +52,9 @@
 \def\w{\omega}
 \def\R{\mathbb{R}}
 \def\fish{\mathcal{I}}
+\def\v{\vec{v}}
+\def\V{\Vec{V}}
+\def\f{\mathcal{F}}
 
 %symbols
 \newcommand{\dotrel}[1]{\mathrel{\dot{#1}}}
@@ -177,7 +181,7 @@ From this theorem, it follows that a $(1-\alpha)100\%$ confidence interval for $
 \[C_\alpha= \{\theta| D(\theta)\leq \chi_{\alpha,d}^2\}\]
 where is the upper $\alpha$-quantile of a $\chi^2$ distribution with $d$ degrees of freedom. This method of creating confidence intervals is usually more accurate then Theorem 1.
 \end{theorem}
-Since Theorem 4 often outperforms Theorem 1, it is of interest to see if we can apply a similar method to get confidence intervals for individual $\theta_i$. To do this, we will need one more tool.
+Since bounds from Theorem 4 often outperform those from Theorem 1, it is of interest to see if we can apply a similar method to get confidence intervals for individual $\theta_i$. To do this, we will need one more tool.
 \begin{definition}[Profile Likelihood]
 Let $\theta_{-i}$ denote all the vector components of $\theta$ except $\theta_i$. Then, the \textbf{profile likelihood}(PLL) for $\theta_i$ is defined as 
 \[\l_p(\theta_i)= \max_{\theta_{-i}}\l(\theta_i, \theta_{-i})\]
@@ -329,10 +333,10 @@ Where \[g_k=\Gamma(1-k\xi)\hspace{1cm} k\in\{1,2\}\]
 and 
 \[\Gamma(x)=\int_0^{\infty}t^{x-1}e^{-t}dt\]
 \subsubsection{Analytic Properties}
-Since a $GEV$ is defined on $1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)>0$, it follows that there is an upperbound on $x$ when $\xi<0$ and a lower bound when $\xi>0$
+Since a $GEV$ is defined on $1+\xi \bigg(\frac{z-\mu}{\sigma}\bigg)>0$, it follows that there is an upper bound on $x$ when $\xi<0$ and a lower bound when $\xi>0$
 \[\begin{cases}
-x < \frac{\mu-\sigma}{\xi}& \text{if }\xi<0\\
-x > \frac{\mu-\sigma}{\xi}& \text{if }\xi>0
+x < \mu-\frac{\sigma}{\xi}& \text{if }\xi<0\\
+x > \mu-\frac{\sigma}{\xi}& \text{if }\xi>0
 \end{cases}\]
 Furthermore, assuming $(\diamond)$ holds for large enough values of $n$, we have 
 \begin{align*}
@@ -413,15 +417,15 @@ on $\{z:1+\xi(z-\mu)/\sigma > 0\}$, where
 We note that $M_n^{(k)}$ must be normalized in the same fashion as $M_n$, and shares the same GEV parameters. To model a single maximum, we can use $G_k(z)$.
 \end{theorem}
 A more interesting application of this theorem, would be to use it to augment the number of observations in our block maxima technique. Consider the vector quantity
-\[\tilde{M}_n^{(r)} = (M_n^{(1)},\hdots, M_n^{(k)})\]
+\[\tilde{M}_n^{(r)} = (M_n^{(1)},\hdots, M_n^{(r)})\]
 From the theorem above, we can get the approximate distribution of each of its sub components and evaluate this fit using qq and pp plots. However, we are more interested in their joint distribution $\tilde{M}_n^{(r)}$. Clearly, we cannot use the i.i.d. assumption, as the components are not independent.
 \begin{theorem}
 If there exist sequences $\{a_n\},\{b_n\}$ such that 
 \[\lim_{n\rightarrow \infty} P \bigg[ \frac{M_n-b_n}{a_n}\leq z \bigg]= G(z)\]
 For some non degenerate distribution function $G$, then, for a fixed $r$ the limiting distribution as $n \rightarrow \infty$ of
 \[\tilde{M}_n^{(r)}= \bigg(\frac{M_n^{(1)}-b_n}{a_n},\hdots, \frac{M_n^{(r)}-b_n}{a_n} \bigg)\]
-Falls within the familit having joint distribution function 
-\[f(z^{(1)}, \hdots,z^{(r)}= \exp \bigg\{ -\bigg[ 1+ \xi \bigg( \frac{z^{(r)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi}\times \prod_{k=1}^r \sigma^{-1} \bigg[ 1+ \xi \bigg( \frac{z^{(k)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi-1}\bigg\} \]
+Falls within the families having joint distribution function 
+\[f(z^{(1)}, \hdots,z^{(r)})= \exp \bigg\{ -\bigg[ 1+ \xi \bigg( \frac{z^{(r)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi}\times \prod_{k=1}^r \sigma^{-1} \bigg[ 1+ \xi \bigg( \frac{z^{(k)} -\mu }{\sigma}\bigg)\bigg]^{-1/\xi-1}\bigg\} \]
 With the $z^{(l}_s$ as ordered statistics. We must also ensure that $$\bigg[ 1+ \xi \bigg( \frac{z^{(k)} -\mu }{\sigma}\bigg)\bigg] >0 \hspace{1cm} \forall k=1,\hdots,r $$
 \end{theorem}
 This theorem gives use a method to fit r-largest statistics to data. In addition to still needing to define blocks and block sizes, we must also decide what values $r$ will take on. While large values of $r$ reduce the variance or our model estimators, these are more likely to violate the asymptotic conditions of the model (as $n\rightarrow \infty$ and $r$ is fixed). The larger our value for $r$, the larger $n$ must be before the conditions hold.
@@ -442,7 +446,7 @@ This limiting distribution corresponds to the generalized Pareto distribution. B
     Var(X)&= \frac{\sigma^2}{(1-\xi)^2(1-2\xi)}&\xi<1/2
 \end{align*}
 \end{theorem}
-When $\xi>0$, then the $GP$ is defined on $[0,\infty)$; when $\xi<0$, then the $GP$ is defined on $[0,\frac{-\sigma}{\xi})$. Similarly to GEVs, the $\xi$ parameter in a GP is the denominating parameter. With $\xi<0$ the distribution of excess has an upper bound of $u- \tilde{\sigma}/\xi$. Inversely, with $\xi>0$ the distribution of excess has no upper limit. We interpret $xi=0$ to be the limiting form of the distribution resulting in an exponential distribution:
+When $\xi>0$, then the $GP$ is defined on $[0,\infty)$; when $\xi<0$, then the $GP$ is defined on $[0,\frac{-\sigma}{\xi})$. Similarly to GEVs, the $\xi$ parameter in a GP is the denominating parameter. With $\xi<0$ the distribution of excess has an upper bound of $u- \tilde{\sigma}/\xi$. Inversely, with $\xi>0$ the distribution of excess has no upper limit. We interpret $\xi=0$ to be the limiting form of the distribution resulting in an exponential distribution:
 \[H(y)= 1-\exp(-y/\tilde{\sigma})\]
 Here are the steps to model extremes using threshold exceedences:
 \begin{enumerate}
@@ -457,7 +461,7 @@ To find the ideal threshold(s), we use the \textbf{mean residual life} (MRL) plo
 \begin{align*}
     \E[X-u|X>u]&=\frac{\sigma_u}{1-\xi}\\&= \frac{\sigma_{u_0} +\xi(u-u_0)}{1-\xi}\\&= \frac{\sigma_{u_0} -\xi u_0}{1-\xi} + \frac{\xi}{1-\xi}u
 \end{align*}
-As we can see, the mean becomes a linear function of $u$ after we have crossed the minimal valid threshold. In an MRL plot, we plot $\frac{1}{n_u}\sum_{i=1}^{n_u}$ vs $u$. Once the plot becomes a linear function of $u$, we can assume we have found the threshold. 
+As we can see, the mean becomes a linear function of $u$ after we have crossed the minimal valid threshold. In an MRL plot, we plot $\frac{1}{n_u}\sum_{i=1}^{n_u}(x_i-u)$ vs $u$. Once the plot becomes a linear function of $u$, we can assume we have found the threshold. 
 
 \subsubsection{Parameter Estimation}
 Given a threshold $u$ and some data,  might wish to estimate $\sigma, \xi$. The log likelihood takes the form:
@@ -551,7 +555,7 @@ We can think of $D^/(u_n)$ as an anti clustering condition. In fact, it implies
 \[\E\bigg[ I_{\{X_i>u_n, X_j>u_n\}} \bigg] \leq [n/k] \sum_{j=1}^{[n/k]}\E [I_{\{X_i>u_n, X_j>u_n\}}] \rightarrow 0\]
 This essentially means that mean joint exceedences over $u_n$ by pairs $X_i,X_j$ are unlikely for large values of $n$.
 \end{definition}
-Immediately, we can observe that for stationary sequences that satisfy both the $D(u_n)$ and $D^/(u_n)$ conditions and where the extremal index $\theta=1$, the behavior of the stationary sequence is indistinguishable from that of the corresponding iid sequence.
+Immediately, we can observe that for stationary sequences that satisfy both the $D(u_n)$ and $D^/(u_n)$ conditions and. Furthermore, when the extremal index $\theta=1$, the behavior of the stationary sequence is indistinguishable from that of the corresponding iid sequence.
 \subsection{Modeling Stationary Sequences}
 Now that we have conditions for which we can recover the distribution of maxima of stationary processes, we can edit our methods for maxima model building from section 4. 
 \subsubsection{Block Maxima}
@@ -659,7 +663,7 @@ methods to model the extremes of the preprocessed data
 In covariate models, we keep our standard extreme value models, and seek to model the non-stationarity by
 allowing parameters to vary with time and other
 covariates. Let $Z_t$ be the block maxima at tome $t$. Consider
-\[Z_t \sim GEC(\mu(t), \sigma(t), \xi(t))\]
+\[Z_t \sim GEV(\mu(t), \sigma(t), \xi(t))\]
 Here are the functions commonly used to model these time varying parameters:
 \begin{itemize}
     \item To model \textbf{location} we usually use one of the following
@@ -675,7 +679,7 @@ Here are the functions commonly used to model these time varying parameters:
     \[\xi(t)=\begin{cases}\xi_1 & t\leq t_0\\ \xi_2 & t> t_0\end{cases}\]
 \end{itemize}
 With $t_0$ known. In fact, we can come up with functions for any extreme value parameter. Let $\theta$ be such a parameter. We write
-\[\theta(t)= h(X^T\beta\]
+\[\theta(t)= h(X^T\beta)\]
 where $h$ is a specified function, $X$ is the model vector, and $\beta $ is the parameter vector. When we do this, we must be careful of the following issues:
 \begin{itemize}
     \item Parameter estimation
@@ -711,13 +715,161 @@ and the qq plot:
 
 If our model is instead measuring exceedences over a threshold such that
 \[Y_t\sim GP(\hat\sigma(t),\hat\xi(t)\]
-We standardize is to an exponential variable with
+We standardize it to an exponential variable with
 mean equal to 1:
 \begin{align*}
     \tilde{Z}_t&= Exp^{-1}_1(GP_{\hat\sigma, \hat\xi}(Y_t))\\
     &=\frac{1}{\hat\xi(t)}\log\bigg[1 +\frac{\hat\xi(t)Y_t}{\hat\sigma(t)} \bigg] \sim \exp(1)
 \end{align*}
 \subsection{Time Varying Thresholds}
-An alternative approach to modeling non stationary processes would be to make use of time varying threshold. These are to be applied on a per-cae basis (i.e. different thresholds for each season). While using sophisticated time-varying threshold approaches could seem reasonable in theory, it is rarely used in practice. When using a time-varying threshold, we cannot get estimates of marginal or conditional return levels below the threshold. Furthermore, models required to correctly explain the
+An alternative approach to modeling non stationary processes would be to make use of time varying threshold. These are to be applied on a per-case basis (i.e. different thresholds for each season). While using sophisticated time-varying threshold approaches could seem reasonable in theory, it is rarely used in practice. When using a time-varying threshold, we cannot get estimates of marginal or conditional return levels below the threshold. Furthermore, models required to correctly explain the
 non-stationarity can be shown to be less parsimonious than the preprocessing approaches discussed in the next section. Finally, it is very difficult to justify the choice of the time-varying threshold.
+\subsection{Preprocessing Methods}
+Since there is no model for non-stationary data, our goal is to preprocess the data so that the resulting sequence is closer to being stationary. In fact, we will transform the data such that the residuals are either iid or stationary. Suppose the conditional distribution of exceedences over a threshold $u_0$ is $GP(\sigma_{u_0},\xi)$. This means that for all $u$ such that $\omega(F)>u\geq u_0$, the exceedences will again follow $GP(\sigma_u, \xi)$ where 
+\[\sigma_u=\sigma_{u_0} +\xi (u-u_0)\]
+To maintain the threshold stability property in a non-stationary model, the functional form of the scale parameter must take the form
+\[\sigma_u(\v)=\sigma_{u_0}(\v)+(u-u_0)\xi(\v)\]
+where $\v$ are the observed values associated with the sequence of covariate $\V$. When working on non-stationary time series data, the common approach is to pre-whiten the data; this same method is applied here for extreme value problems. The process is as follows. First, we fit a model for the covariate effect on the underlying distribution of the process $\{X_t\}$. In practice, we often use domain knowledge to find which function to fit. When domain knowledge bring no aid, the Box-cox location-scale model of the form 
+\[\frac{X_t^{\lambda(\v_t)}-1}{\lambda(\v_t)}= \mu(\v_t)+\phi(\v_t)Z_t\]
+where $\mu, \lambda, \phi$ are all linear functions of the covariates and $\{Z_t\}$ are assumed to be approximately stationary. In practice, we do extreme value analysis on $\{Z_t\}$. Here are the modeling steps:
+\begin{enumerate}
+    \item Estimate the Box-Cox and location-scale parameters $\mu(\v), \lambda(\v), \phi(\v)$, then proceed by assuming that the underlying distribution is Gaussian
+    \item Estimate the scale and shape parameters $\sigma(\v), \xi(\v)$ of the  GP that is used to model the exceedances of the observed residual series of$\{Z_t\}$ over a high threshold $u$
+    \item  Observed residuals below the threshold are modeled by the empirical distribution $\tilde{F}_Z$.
+\end{enumerate}We hope that the B-C model takes our all the non-stationarity from $\{X_t\}$ but it may also take out some relevant statistical information. It is important to note that the extremes of $\{Z_t\}$ might be different from those of $\{X_t\}$ and thus may not behave like an extreme value stationary sequence. There is a non-negligible chance the Box-Cox model may not fully capture all the covariate effects.
+
+\section{Extremes of Financial Time Series}
+Losses are central to financial risk management. Often, our goal is to consider conditional risk (i.e. conditional on today, how much will I lose tomorrow). Our main interest lies in the tails of the conditional return distribution and we will only briefly discuss unconditional returns. That being said, the tools and approaches we use to model this type of data carry over to other applications. 
+
+There are a few approaches to modeling the tails of the time-varying conditional return distribution. The first of these (discussed in this section) focuses on modeling the conditional mean and variance of the losses, then applying EVT to the standardized residuals. The hope here is that the if the mean and variance completely characterize the dependence structure, then the residuals will be iid. When using this technique, we can make use of all the data; however, there is a lot of empirical evidence which questions whether we can remove all dependence dynamics through preprocessing. The second approach is to use a dynamic extreme value model that accounts for dependence at each point. This approach makes no use of preprocessing.
+\subsection{Modeling Volatility Dynamics}
+We consider financial losses, defined as
+\[r_t=\frac{-(P_t-P_{t-1})}{P_{t-1}}\]
+Where $P_t$ is is the stock price on day $t$. The value at risk (VaR) is the quantile of the $r_t$ and expected shortfall (ES) is the conditional expectation of the $r_t$. Here, VaR refers to the valuew we will lose with a fairly low possibility (i.e. 0.01).Note, we consider the losses, and not the returns, so that VaR and ES of interest lie in the upper tail of the distribution of losses and we can talk about exceedances over high thresholds in the usual sense. We focus on daily estimates of VaR and ES, but the methods presented can also be used to provide estimates for any period of time. Consider the following graph:
+\begin{figure}[H]
+\begin{center}
+{\includegraphics[width=2in]{notes/volatility.png}}
+\end{center}
+\end{figure}
+We might be interested estimation of the VaR and ES conditional on the level of volatility. Here, volatility at time $t$ can be thought of as the potential energy carried in the graph up to time $t$. To condition of volatility, we must first specify a model for volatility dynamics. Let $\f_{t-1}$ denote the information set available at time $t-1$. To model timme-varying volatility, we fit multiplicative models to the process
+\[r_t-\E(r_t|\f_{t-1})\]
+
+\subsubsection{ARMA-GARCH Model}
+The first model we use to model volatility is an $\text{ARMMA}(s,v)-\text{GARCH}(p,q)$ model defined as 
+\begin{align*}
+    r_t&= \kappa+ \sum_{h=1}^s\phi_hr_{t-h} + \sum_{l=1}^v \vartheta_j\varepsilon_{t-l}+\varepsilon_t\\
+    \varepsilon_t&= \sigma_tz_t\\
+    \sigma_t^2&=\alpha_0 + \sum_{i=1}^p\lambda_i\varepsilon_{t-i}^2+\sum_{j=1}^q\gamma_j\sigma_{t-j}^2
+\end{align*}
+Where $z_t$ are iid innovations with some unknown distribution function $G$, with $\E(z_t)=0$ and Var($z_t$)=1. We assume that the ARMA parameters $(\kappa, \phi_h)$ and the GARCH parameters $(\alpha_0>0, \lambda_i,\gamma_i\geq 0)$ all satisfy the necessary constraints for stationarity. Additionally, any fixed $t$, $\sigma_t$ and $z_t$ are independent.
+
+\noindent After we fit this model to retrieve the all parameter estimates, we will perform extreme value analysis on the fitted scaled residuals of the volatility dynamics model $\hat{z}_t= \frac{\hat{\varepsilon}_t}{\hat{\sigma}_t}$. For this reason, it is crucial that our estimators from the volatility dynamics modeling have good properties. When the innovations have a finite moment (i.e. $\E(z_t^4)<\infty$), the quasi-maximum likelihood estimators of ARCH-GARCH models are consistent and asymptotically normal. In practice, $\E(z_t^4)$ is not finite for many series. Not only is this an issue but there is domain knowledge that is not take into consideration.
+\subsubsection{AR-GJR-GARCH Model}
+ Economic theory suggests that market information should have an asymmetric influence on volatility and empirical analyses show that positive and negative impact on conditional volatility. This gives rise to a GARCH model that applies \textbf{leverage}. The leverage effect is caused by the fact that negative returns have a higher influence on future volatility than positive returns. In order to incorporate leverage into a GARCH model, we fit an AR($p$)-GJR-GARCH(1,1) model to financial losses $r_t$. 
+ \begin{align*}
+     r_t&= \phi_0+\sum_{h=1}^p\phi_hr_{t-h}+ \varepsilon_t\\
+     \varepsilon_t&= \sigma_tz_t\\
+     \sigma_t^2&= \alpha_0+\lambda(|\varepsilon_{t-1}|-\gamma\varepsilon_{t-1})^2+\kappa\sigma_{t-1}^2
+ \end{align*}
+ where $(\phi_0,\hdots,\phi_p)$ lies in a compact subset of $\mathbb{R}^{p-1}$, $\alpha_0>0, \lambda\geq 0, 0\geq \kappa <1,$ and $-1\leq \gamma\leq 1$. As before, for any fixed $t$, $\sigma_t$ and $z_t$ are independent and $z_t$ are iid innovations with an unknown distribution function $G$. With the parameter vectore defined as bellow
+\[\theta=(\phi_0, \hdots, \phi_p, \alpha_0, \lambda, \gamma, \kappa)\]
+It has been shown that the global Gaussian quasi maximum likelihood estimator (QMLE) is strongly consistent (meaning that $\hat\theta_T \rightarrow \theta_0$ almost surely if the following conditions hold:
+\begin{enumerate}
+    \item The random variable $z_t$ are stationary and ergodic
+    \item $\E[\ln(\kappa+\lambda(|z_t|-\gamma z_t)^2]<0$
+    \item $\E[|z_t|^{2r}]<\infty$ and $\E[(\kappa+\lambda(|z_t|-\gamma z_t)^2)^r|\f_{t-1}^z]\leq C <1$ almost surely for some $r>0$
+    \item $1-\sum_{j=1}^p \phi_jx^k\neq0, |x|\leq 1$
+    \item $\E[z_t|\f_{t-1}^z]=0$ and  $\E[z_t^2|\f_{t-1}^z]=1$ almost surely
+    \item for all $t$, the conditional distribution of $z_t$ given $\f^z_{t-1}$ is not
+concentrated at two points
+    \item $\kappa>0$
+\end{enumerate}
+This means that the QMLE is consistent (even for heavy tailed innovation distributions) as long as they have a finite moment. If our model is correctly specified, the the scaled residuals
+\[\hat{z}_t=\frac{\hat\varepsilon_t}{\hat\sigma_t}\]
+Should resemble an iid sequence from the generating distribution function $G$. These scale residuals are used to check the adequacy of the dynamic model and used as input for the extreme value analysis stage of our method. 
+\subsection{Modeling the Innovation Distribution}
+Although GARCH processes are known to be Pareto-like and heavy tailed, the scaled residuals may have (significantly) thinner tails than the original series. As we are interested in the conditional return distribution, our interests lie in the tail index of the innovations distribution. For a series that is AR($p$)-GARCH(1,1), there is no result to estimate the tail thickness. In fact, scaled residuals of these models tend to cluster above high levels. This means the scaled residuals still have dependence in extreme values. We could decluster these scaled residuals and then fit a GPD to threshold exceedences, but this approach is less than optimal. As these will result in difficulties when getting estimates for VaR and ES. The ideal approach would consist of eliminating all non-stationarity at all levels (including innovation distribution) and then use a large enough threshold in GP analysis such that clustering is not an issue. 
+
+\subsection{Estimation Details}
+The actual fitting process is as follows. Consider using data for day $t=1,\hdots, T$ to perform analysis.
+\begin{enumerate}
+    \item We fit an AR($p$)-GJR-GARCH(1,1) model using $p=3$. This is use because we do not know the distribution of the QMLE under the standard AR($p$)-GJR-GARCH(1,1) model. Our hope is that setting $p=3$ gives us a sufficiently flexible model that contains the true model.
+    \item We calculate the scaled residuals
+    \[\hat{z}_t= \frac{\hat\varepsilon_t}{\hat\sigma_t}\]
+    After which we need to check our residuals. To do so, we use the Ljung-Box portmanteau test on the residuals and the squared residuals. If we get a large enough p value, we cannot reject the null hypothesis of no autocorrelation and assume that our model is successfully modeling the serial correlation structure in the conditional mean and the conditional variance of our data. After this, we use the intervals estimator of Ferro and Segers (discussed in section 5.2.5) to estimate the extremal index.
+    \item Given no evidence of clustering (the extremal index is close to 1), we fit a $GP(\beta,\xi)$ to the points
+    \[(z_{(n-k+1)}- z_{n-1}), \hdots, (z_{(n)}- z_{(n-k)}) \]
+    where $z_{(n-k)}$ is the order statistic used as a threshold.
+    \item The tail estimator for $F_Z(z)$ then takes the form
+    \[\widehat{F_Z(z)}= 1- \frac{1}{k} \bigg( 1 +\hat\xi \frac{z-z_{(n-k)}}{\hat\beta} \bigg)^{-1/\hat\xi}\]
+    \item For $q>1-\frac{k}{n}$, we can invert the tail formula and get a form for the $q^{th}$ upper quantile of the marginal distribution of $Z_t$
+    \[\hat{z}_q= z_{(n-k)}+\frac{\hat\beta}{\hat\xi} \bigg( \big(\frac{1-q}{k/n}  \big)^{-\hat\xi}-1 \bigg)\]
+\end{enumerate}
+\subsubsection{Computing VaR and ES}
+To compute the VaR and ES, we need the one-step ahead predictions for the conditional mean and the volatility. To calculate these, we use our estimates in the usual AR(3)-GJR-GARCH(1,1) equation:
+\begin{align*}
+    \hat{r}_{T+1}&= \hat{\phi}_0+\sum_{h=1}^3\hat{\phi}_hr_{T-h+1}\\
+    \hat\sigma_{T+1}&= (\hat{\alpha_0}+\hat\lambda (|\hat\varepsilon_T|-\hat\gamma\hat\varepsilon_T)^2 +\hat\kappa\hat\sigma_T^2)^{\frac{1}{2}}
+\end{align*}
+Once we have these, we compute our statistics:
+\begin{align*}
+    \widehat{\text{VaR}}_T(q)&= \hat{r}_{T+1}+ \hat{z}_q\hat\sigma_{T+1}\\
+    \widehat{\text{ES}}_T(q)&= \hat{r}_{T+1}+ \hat{z}_q\hat\sigma_{T+1} \bigg( \frac{1}{1-\hat\xi} +\frac{\hat\beta - \hat\xi z_{(n-k)}}{(1-\hat\xi)\hat{z}_q} \bigg)
+\end{align*}
+\subsection{Back Testing}
+To assess the performance of the extreme value approach, we perform back testing on VaR and ES estimates. We use a backward window of 1000 days to estimate the model each time. For example, we can analyze the distribution of the $\xi$ parameter over the back test period. Through this, we can assess the consistency of $\theta$ \footnote{TODO MAKE BETTER}. We can also use back testing to compare our data observations to VaR and ES. 
+\subsubsection{Back Testing VaR}
+We record the number of cases where the return losses were greater than the VaR estimate. Using 
+\[P(t_{t+1}>\text{VaR}_t(q))= 1-q\]
+we know the probability of a violation is $1-q$. Let $C$ be the number of points we are back testing. We then use it to carry out the binomial test. The expected number of violations is the probability of a violation times the number of points we are back testing
+\[T=C(1-q)\]
+Under the null hypothesis, the model correctly identifies conditional quantiles and the expected number of violations follows a binomial distribution: $T\sim \text{Binom}(C, 1-q)$. We then perform a two sided binomial test of the null hypothesis against the alternative hypothesis that the estimates have systematic estimation error and give too few or too many violations.
+\subsubsection{Back Testing ES}
+The ES is the preferred measure of market risk as it gives some information about the size of potential losses given that a loss bigger that VaR has occurred. Under the null hypothesis that we correctly estimate the dynamics of the model and the first moment of the truncated innovation distribution ($\E[Z|Z>\text{VaR}_t(0.99)]$) the quantity below should behave like an iid sample with mean 0.
+\[\hat\sigma_{t+1}^{-1}(r_{t+1} - \widehat{\text{ES}}_t(0.99))\]
+We test this mean zero hypothesis using a bootstrap test.
+\subsubsection{Batch Testing Extremal index}
+When back testing, it is important that the estimated value of the extremal index following the intervals estimator is equal to 1.
+\subsection{Discussion}
+When using the two stage approach, the error from the time series modeling propagates through to the distributional fitting of the innovations in the second stage. This results in difficulties hen quantifying the overall error. Howver, it has been shown that a two stage approach still provides good conditional VaR and ES forecast under mis-specification (Jalal and Rockinger (2008)).
+
+\subsection{Realizing the Extremes}
+While using an AR($p$)-GJR-GARCH(1,1) model works well for pre-whitening the data, it is often better to use a high frequency based volatility model. These are called realized EVT models. While the GARCH models filter the dependence adequately the realized EVT models perform better at forecasting especially at longer time horizons. 
+\subsubsection{Theory of Realized Measures}
+Let $p_t$ be the logarithmic price at time $t$ and defite the conditional log-returns as
+\begin{align*}
+    p_t-p_{t-1}&=r_t=\mu_t+\sigma_t\varepsilon_t\\
+    y_y&=f(\f_{t-1})\\
+    \sigma_t^2&=h(\mathcal{H}_{t-1})
+\end{align*}
+where $\varepsilon_t$ is an iid process with zero mean and unit variance, $\mu_t$ is the conditional mean, and $\sigma_t^2$ is the conditional variance. These moments are functions of the information sets $\f_{t-1}$ and $\mathcal{H}_{t-1}$. The idea is to incorporate high frequency (intra daily) information in these sets. Assuming $\mu_t$ is constant, we specify a class of high-frequency based volatility models for the variable $\sigma_t^2$ using as a proxy the realized volatility $(RV)$. Here, $RV$ serves as a non-parametric estimator of the variation of the price path of an asset obtained by the sum of square of intra-day returns. Let 
+\[r_{t,\Delta}= p_t-p_{t-\Delta}\]
+With $t_{t,\delta}$ denoting the discretely sampled $\Delta-$period return, we define $RV$ on day $t$ as 
+\[RV_t= \sum_{j=1}^Nr^2_{t-1+(j\cdot \Delta),\Delta}\]
+We assume the $\sigma_t^2$ is defined as a function of the conditional $RV$ as below
+\[\sigma_t^2=g(\E[RV_t|\mathcal{H}_{t-1}])\]
+\subsubsection{Modeling Realized Extremes}
+To model volatility (given by $\sigma_t^2$), we must specify a model for the conditional expectation of the $RV$ and a ling function $g$ that maps the conditional mean of the $RV$ to the conditional variance of the returns. For this purpose, we use the heterogeneous autoregressive (HAR) class of models. Let the multi-period normalized $RV$ be denoted by
+\[RV_{t,t+h}=\frac{1}{h}[RV_{t+1}+ \hdots+RV_{t+h}]\]
+The daily HAR model can be expressed as 
+\[\log(RV_{t,t+h}) = \beta_0+ \beta_D\log(RV_t)+\beta_W\log(RV_{t-5,t})+\beta_M\log(RV_{t-22,t})+\eta_{t,t+h}\]
+We see that this specification exploits the information from the 1-day $RV$, the 5-day average $RV$ and the 22-day average $RV$ thus reflecting the idea that heterogeneity in investor behavior creates different volatility components having different impacts on the future volatility. Now that we have a model for the conditional expectation of the $RV$, we can focus on specifying our link function $g$. The following are the 3 most likely choices:
+
+\begin{align*}
+    \hat\sigma_{t,t+h}^2&=  \exp\bigg( \widehat{\log(RV_{t,t+h})} \bigg)\\
+    \hat\sigma_{t,t+h}^2&=  c+ d\exp\bigg( \widehat{\log(RV_{t,t+h})} \bigg)\\
+    \hat\sigma_{t,t+h}^2&= c + d \exp\bigg( \widehat{\log(RV_{t,t+h})} +0.5\hat\sigma_{\hat\eta}^2 \bigg)
+\end{align*}
+Where $c,d$ are coefficients to be estimated and $\hat\sigma_{\hat\eta}^2$ is the estimated variance of the logarithmic HAR regression residuals.
+\subsubsection{Summary of Realized EVT Approach}
+The realized EVT approach the amounts to
+\begin{enumerate}
+    \item Fitting a high frequency based model for conditional variance
+    \item Filtering the returns (effectiveness measured with extremal index)
+    \item Fitting a GP model on the tails to obtain a tail estimator
+    \item $h$-day ahead prediction of VaR and ES using the tail estimator for the residuals and $h$-period forecasts of the conditional mean and variance obtained from fitting HAR model directly onto the multi-period $RV$.
+\end{enumerate}
+
+
+
 \end{document}

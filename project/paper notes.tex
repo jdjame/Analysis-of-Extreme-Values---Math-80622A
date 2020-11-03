@@ -1,0 +1,78 @@
+\documentclass{article}
+
+%install your packages here 
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{setspace}
+\usepackage{cancel}
+\usepackage{bbm}
+\usepackage{pgfplots}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{diagbox}
+\usepackage{ tipa }
+\usepackage{hyperref}
+\usepackage{float}
+\hypersetup{
+    colorlinks=true,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\usetikzlibrary{arrows, calc, patterns, shapes}
+  \pgfplotsset{compat=1.15}
+\renewcommand{\baselinestretch}{1.25}
+\newcommand\sbullet[1][.5]{\mathbin{\vcenter{\hbox{\scalebox{#1}{$\bullet$}}}}}
+
+%theorems
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\newtheorem{example}{Example}[section]
+
+%write short hand notes here 
+%standard stats
+\def\E{\mathbb{E}}
+\def\l{\ell}
+\def\xs{\{x_1, \hdots, x_n\}}
+\def\Xs{\{X_1, \hdots, X_n\}}
+
+%standard cal
+\def\j{\mathcal{J}}
+\def\sumn{\sum^n_{i=1}}
+\def\inv{^{-1}}
+\def\w{\omega}
+\def\R{\mathbb{R}}
+\def\fish{\mathcal{I}}
+\def\v{\vec{v}}
+\def\V{\Vec{V}}
+
+%symbols
+\newcommand{\dotrel}[1]{\mathrel{\dot{#1}}}
+
+
+
+\title{Math 806222 Project}
+\author{Jean }
+\date{Fall 2020}
+
+\begin{document}
+\maketitle
+\tableofcontents{}
+\pagebreak
+\section{Introduction}
+
+\section{Shortcomings}
+\begin{enumerate}
+    \item No checking that the data is approximately stationary or not
+    \item no prediction offered
+\end{enumerate}
+\end{document}

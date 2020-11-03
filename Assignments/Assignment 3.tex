@@ -1,7 +1,7 @@
 \documentclass[12pt,oneside]{article}
 \newcommand{\name}{Jean-Yves Djamen}
 \newcommand{\class}{Math 80266A}
-\newcommand{\hwnumber}{2}
+\newcommand{\hwnumber}{3}
 
 \usepackage[margin=1in,letterpaper]{geometry}
 %geometry changes the margins
@@ -153,14 +153,14 @@ tables and figures.
 \end{problem}
 
 \begin{solution}
-In our analysis, we use the supplied code to transform the hourly rainfall data into the max-monthly rainfall data. As we are looking for good estimates of the upper tail, we focus on the prediction of the $95^{th}$ and $99^{th}$ quantiles of the max rainfall data ($z_{0.05},z_{0.01}$). From our investigation, we found the best estimates and their confidence intervals below:
+In our analysis, we use the supplied code to transform the hourly rainfall data into the max-monthly rainfall data. As we are looking for good estimates of the upper tail, we focus on the prediction of the $95^{th}$ and $99^{th}$ quantiles of the max rainfall data ($z_{0.05},z_{0.01}$). From our investigation, we found the best estimates to be :
 \begin{align*}
     p= 0.05  && \hat{z}_{0.05}=23.67 \\
     p= 0.01  && \hat{z}_{0.01}=30.52 
 \end{align*}
 The methods for model creation, selection, and parameter estimation are discussed in the next sections.
 \section*{Preliminary Data Analysis}
-We begin our analysis by considering July and August rainfall data as one dataset. If the model diagnostics from considering the two months as having the same underlying process for generating rain are poor, latter analyses will consider the data separately. From observation of the data (shown below) and its corresponding ACF plot, we will assume that the monthly maximum hourly rainfall data follows a process where the $D(u_n)$ condition is held. 
+We begin our analysis by considering July and August rainfall data as one dataset. This is done to give more samples to the covariate model(s) we fit. From observation of the data (shown below) and its corresponding ACF plot, we will assume that the monthly maximum hourly rainfall data follows a process where the $D(u_n)$ condition is held. 
 \begin{figure}[H]
 \begin{center}
 {\includegraphics[width=3in]{Assignments/a3/rain.png}}
@@ -168,7 +168,7 @@ We begin our analysis by considering July and August rainfall data as one datase
 \caption{Maximum monthly rain}
 \end{center}
 \end{figure}
-\noindent This decision made, we must decide which of the supplementary data we wish to include in our model. At a later point, this will be done through model selection. However, to get an intuitive feel for the data, we plot the monthly Saint Louis data against each of these covariates in turn. From these (shown below), we note that the effects of SOI and PDO are similar with respect to the maximum monthly rainfall. This would suggest that these are affecting the same parameter (scale). However, their effects on the monthly rainfall seems to be less than the effects of the weather. We note this as the graph of rain vs weather exhibits less of an ``even" spread. Of course all of these are just speculations which we must test in our model building process.
+\noindent This decision made, we must decide which of the supplementary data we wish to include in our model. At a later point, this will be done through model selection. However, to get an intuitive feel for the data, we plot the monthly Saint Louis data against each of these covariates in turn. From these (shown below), we note that the effects of SOI and PDO are similar with respect to the maximum monthly rainfall. This would suggest that these are affecting the same parameter (scale). However, their effects on the monthly rainfall seems to be less than the effects of the weather. We note this as the graph of rain vs weather exhibits less of an ``even" spread which may suggest that temperature affects location. Of course all of these are just speculations which we must test in our model building process.
 \begin{figure}[H]
 \begin{center}
 {\includegraphics[width=3in]{Assignments/a3/rain-vs-soi.png}}
@@ -227,7 +227,7 @@ Here we note that for a 95\% hypothesis test, we cannot reject the null hypothes
      II&$\mu_3$ & $\sigma_{2PS}$ & -205.81 & --  \\\hline
      V& $\mu_{2PS}$ & $\sigma_{2PS}$ & -207.97 & 4.33\\\hline
      \textbf{VI}& $\mu_{2PT}$ & $\sigma_{2PS}$ & -206.06 & 0.51 \\\hline
-     \textbf{VII}& $\mu_{1T}$ & $\sigma_{2PS}$ &  206.22 & 0.32 \\\hline
+     \textbf{VII}& $\mu_{1T}$ & $\sigma_{2PS}$ &  -206.22 & 0.32 \\\hline
 \end{tabular}
 \end{center}
 Here instead, we note that only the temperature has a significant effect on the location parameter. This gives rise to our final model:
@@ -241,6 +241,9 @@ From the diagnostics pp and qq plots (below), we see that although our model is 
 \end{figure}
 Since we used a covariate model, each of the 72 data points we have corresponds to a unique grouping of parameters $(\mu(t), \sigma(t), \xi)$. For this reason, for a given $p$, we create a list of the daily quantile $\{z_p(t)\}$ and then, use the maximum quantile in this set as our estimate. 
 \[\hat{z}_p = \max_{z}\{\hat{z}_p(t)| t=1,\hdots,72\}\]
+
+\section*{Conclusions}
+From the diagnosis plot, we see that our model may under estimate the upper quantiles but it is the best model we have been able to arrive to. It is also worth mentioning that the estimate for $z_{0.01}$ is so high that it might not have any practical value since 30 is significantly larger than all previously measured hourly rainfalls in St. Louis.
 \end{solution}
 
 \end{document}
