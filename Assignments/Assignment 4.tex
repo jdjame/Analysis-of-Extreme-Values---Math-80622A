@@ -85,7 +85,7 @@ We will run standard extreme value analysis on each of the datasets available. F
 
 As far as diagnostics, we will be using the Ferro-Segers method to assess the clustering behavior of the scaled innovations, the Box-Ljung test to assess the independence of these residuals, and (only in the daily data case) back testing to assess the performance of the two step EV method. We do not back test weekly data as we do not have enough points for effective back testing.
 
-From the monthly data we will be able to produce a ``next month" risk estimate, however, the modeling technique used here will be different. Because we have less sample points and these can be seen to be approximately stationary (shown later) we directly model these using standard GEV analysis methods.
+From the monthly data we will be able to produce an estimate for the maximum loss over 120 months. Because we have less sample points which can be seen to be approximately stationary (shown later), we directly model these using standard GEV analysis methods.
 
 To investors, only the last analysis would matter as the two others give estimates for risk in the past.
 
@@ -100,7 +100,7 @@ First let us take a look at the daily losses through time:
 \end{figure}
 We note sporadic behavior (high volatility) of losses in the beginning of 2020. This is likely due to the effects of the pandemic on the stock market. The effects of COVID-19 on S\&P500 are again reflected in the losses on weekly and monthly data. 
 
-Next, we fit an AR(3)-GJR-GARCH(1,1) model to remove volatility and recover the (hopefully stationary) innovations. Bellow we compare the ACF plot of observations to the ACF plot of the standardized residuals. As we can note, the standardized residuals have weaker autocorrelation amongst them than the original data. 
+Next, we fit an AR(3)-GJR-GARCH(1,1) model to remove volatility and recover the (hopefully stationary) innovations. Below we compare the ACF plot of observations to the ACF plot of the standardized residuals. As we can note, the standardized residuals have weaker autocorrelation amongst them than the original data. 
 \begin{figure}[H]
 \begin{center}
 {\includegraphics[width=4.5in]{Assignments/a4/day-acfs.png}}
@@ -171,7 +171,7 @@ Again, let us begin by taking a look at the data.
 As before, we fit an AR(3)-GJR-GARCH(1,1) model and observe the diagnostics. 
 \begin{figure}[H]
 \begin{center}
-{\includegraphics[width=4in]{Assignments/a4/week-acfs.png}}
+{\includegraphics[width=3in]{Assignments/a4/week-acfs.png}}
 \caption{ACF or standardized residuals and original weekly data }
 \end{center}
 \end{figure}
@@ -204,11 +204,18 @@ As before, we begin our analysis with a visualisation of the data. Since we do n
 
 \begin{figure}[H]
 \begin{center}
+{\includegraphics[width=3in]{Assignments/a4/month-data.png}}
+\caption{Monthly Losses of S\&P500}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
 {\includegraphics[width=4.5in]{Assignments/a4/mth-acf.png}}
 \caption{ACF of monthly data}
 \end{center}
 \end{figure}
-Since the strength of these auto correlations seems low, we proceed with the B-L test and get a p value of 0.228 and cannot reject the null hypothesis that the autocorrelation are significantly different from 0. From this, we apply the Ferro-Segers extremal index estimator (table below). Using this estimator, we can assume that the high threshold values show low signs of clustering.
+Since the strength of these auto correlations seems low, we proceed with the B-L test and get a p value of 0.228 and cannot reject the null hypothesis that the autocorrelation are not significantly different from 0. From this, we apply the Ferro-Segers extremal index estimator (table below). Using this estimator, we can assume that the high threshold values show low signs of clustering.
 
 \begin{center}
 \begin{tabular}{ ||c |c |c|| }\hline
@@ -222,7 +229,15 @@ Threshold & Quantiles& Theta\\\hline
 \end{tabular}
 \end{center}
 
- From these results we will assume the data is stationary and has low volatility that can be estimated (or removed).  Therefore, we directly fit a GEV to our data and observe the month return level. This gives us the value at risk for the next 4 months.
+ From these results we will assume the data is stationary and has low volatility that can be estimated (or removed). Therefore, we directly fit a GEV to our data and observe note the performance of our fit.
+ \begin{figure}[H]
+\begin{center}
+{\includegraphics[width=4.5in]{Assignments/a4/month-diag.png}}
+\caption{GEV Diagnostic Plot - Monthly Data}
+\end{center}
+\end{figure}
+From the diagnostic plot, we see that while our model may underestimate sample quantiles, these are still covered by the confidence intervals. Therefore, we can proceed with our analysis and make an estimate for the maxima for the return level over 120 months. This value (and the corresponding confidence intervals) will give us the maximum loss we expect to see over the next 10 years. The value is 7.96 and the confidence intervals are   [9.37 11.88].
+
 
 
 \end{solution}
