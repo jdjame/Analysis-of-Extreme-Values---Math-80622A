@@ -831,12 +831,12 @@ We test this mean zero hypothesis using a bootstrap test.
 \subsubsection{Batch Testing Extremal index}
 When back testing, it is important that the estimated value of the extremal index following the intervals estimator is equal to 1.
 \subsection{Discussion}
-When using the two stage approach, the error from the time series modeling propagates through to the distributional fitting of the innovations in the second stage. This results in difficulties hen quantifying the overall error. Howver, it has been shown that a two stage approach still provides good conditional VaR and ES forecast under mis-specification (Jalal and Rockinger (2008)).
+When using the two stage approach, the error from the time series modeling propagates through to the distributional fitting of the innovations in the second stage. This results in difficulties when quantifying the overall error. However, it has been shown that a two stage approach still provides good conditional VaR and ES forecast under mis-specification (Jalal and Rockinger (2008)).
 
 \subsection{Realizing the Extremes}
 While using an AR($p$)-GJR-GARCH(1,1) model works well for pre-whitening the data, it is often better to use a high frequency based volatility model. These are called realized EVT models. While the GARCH models filter the dependence adequately the realized EVT models perform better at forecasting especially at longer time horizons. 
 \subsubsection{Theory of Realized Measures}
-Let $p_t$ be the logarithmic price at time $t$ and defite the conditional log-returns as
+Let $p_t$ be the logarithmic price at time $t$ and define the conditional log-returns as
 \begin{align*}
     p_t-p_{t-1}&=r_t=\mu_t+\sigma_t\varepsilon_t\\
     y_y&=f(\f_{t-1})\\

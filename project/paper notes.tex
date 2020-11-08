@@ -54,6 +54,9 @@
 \def\fish{\mathcal{I}}
 \def\v{\vec{v}}
 \def\V{\Vec{V}}
+\def\lam{\boldsymbol{\lambda}}
+\def\thet{\boldsymbol{\theta}}
+\def\k{\kappa}
 
 %symbols
 \newcommand{\dotrel}[1]{\mathrel{\dot{#1}}}
@@ -69,10 +72,59 @@
 \tableofcontents{}
 \pagebreak
 \section{Introduction}
+This paper uses the result from Pickands(1975) to arrive at the following result. Let $X$ be a random variable. If there exists a scaling function $h_x(u)$ such that the scaled excesses of $X$ over some threshold $u$ converge to a distribution function as $u$ approaches $\sup\{x:F_X(x)<1\}$ then the distribution function that quantity converges to must be Generalized Pareto (GP).
+\[\lim_{u\rightarrow x^{F_X}} P\bigg\{\frac{X-u}{h_x(u)}<x|X>u \bigg\}\sim GP(1,\xi)\]
+In practice, when we fit data to the GP distribution, we focus only on fitting the threshold exceedences $X-u|X>u$ and allow for $h_x(u)$ to be absorbed by the scale term ($\sigma$). This gives a result similar to what was seen in class:
+\[ \lim_{u\rightarrow x^{F_X}} P[X-u|X>u]\sim GP(\sigma, \xi)\]
+However, problems arise when fitting a GP distribution. Picking the threshold $u$ to calculate exceedences over is not a simple problem. Usually, we use the smallest value of $u$ for which the modified scale $\sigma^*=\sigma_u-\xi u$ stabilizes. In many cases, such a value for $u$ might not exist. This leads to estimates being unstable over different thresholds. The aim of this paper is to construct parametric models over exceedences that are more flexible than the standard generalized Pareto distribution. This is done by creating a class of Extended Generalized Pareto models(EGP).
+
+\section{Extension to the GP Model}
+Let $F(x;\lam)$ be the cdf of the GP function where $\lam=(\sigma, \xi)$. In this paper, models having a cdf of the form $G(x;\k,\lam)$ are constructed where $\k>0$ is a shape parameter that induces skewness into the standard GP distribution but retains $\xi$ as the tail index. Additionally, These cdfs are made to generalize to the GP as there exists a $\k^*$ such that $G(x;\k^*,\lam)= F(x;\lam)$.
+\subsection{Construction}
+Constructions in of the extended Generalized Pareto Distribution make use of a modification of the probability integral transform. Recall that if $V\sim Unif(0,1)$ then the random variable defined as $W=F_X^{-1}(V;\lam)$ will follow a generalized Pareto distribution with parameters $\lam$. In the purposes of this construction, the restriction on $V$ is relaxed from uniform to a random variable with support on the unit interval. In fact, $V$ is chosen such that the 
+%todo: write about probability integral transform and how it makes this easier
+
+\subsection{Models}
+Three options for the distribution of $v$ and their resultign $F^{-1}(V;\lam)$ are shown below. But fist, we denote the incomplete beta and gamma functions as 
+\begin{align*}
+    \beta(x;a,b)&=\frac{1}{\text{Be}(a,b)} \int_{0}^x t^{a-1}(1-t)^{b-1}dt & 0\leq x\leq 1\\
+    \gamma(y,a)&=\frac{1}{\Gamma(a)}\int_{0}^yt^{a-1}e^{-t}dt & 0\leq y\leq \infty
+\end{align*}
+with these defined and available to us, we 
+\begin{enumerate}
+    \item  [1.] [EGP1($\k, \sigma,\xi)$] With $F_V(v;\thet)=\beta\{1-(1-v)^{|\xi|},\k,|\xi|^{-1}\}$, and $\thet =(\kappa,\xi)$, $W=F^{-1}(V,\lam)$ has the following pdf
+    \[g(x,\lam,\thet)=\begin{cases} \frac{|\xi|/\sigma}{\text{Be}(\k, |\xi|^{-1})}\{1-(1+\xi x/\sigma)_+^{-|\xi|/\xi}\}^{\k-1} (1+\xi x/\sigma)_+^{-1/\xi-1} & \xi \neq 0\\\\
+    \frac{\sigma^{-1}}{\Gamma(\k)}x^{\k-1}e^{-x/\sigma} & \xi \rightarrow 0
+    \end{cases}\]
+    
+    \item [2.][EGP2($\k, \sigma,\xi)$] With $F_V(v,\thet)=1-\gamma\{-\log(1-v),\k\}$, and $\thet= \k$,  $W=F^{-1}(V,\lam)$ has the following pdf
+    \[g(x,\lam,\thet= \begin{cases}\frac{\sigma^{-1}}{\Gamma(\k)}\{\xi^{-1}\log(1+\xi x/\sigma)_+\}^{\k-1} (1+\xi x/\sigma)_+^{-1/\xi-1} & \xi\neq 0\\\\
+    \frac{\sigma^{-1}}{\Gamma(\k)}x^{\k-1}e^{-x/\sigma} & \xi\rightarrow 0
+    \end{cases}\]
+    \item [3.] [EGP3($\k, \sigma,\xi)$] With $F_V(v;\thet)= v^\k$, and $\thet= \k$, $W=F^{-1}(V,\lam)$ has the following pdf
+    \[g(x,\lam,\thet= \begin{cases} \frac{\k}{\sigma}\{1-(1+\xi x/\sigma)^{\k-1}(1+\xi x/\sigma)_+^{-1/\xi-1}\} & \xi \neq 0\\\\
+    \frac{\k}{\sigma}(1-e^{-x/\sigma})^{\k-1}e^{-x/\sigma} & \xi \rightarrow 0
+    \end{cases}\]
+\end{enumerate}
+
+\subsection{Model Discussion}
+For all these models, $\k>0$ us a shape parameters that adds more flexibility in the main body and does not alter the tail behavior (this is a result from Theorem 1 and Corrolary 1). Additionally, all the EGP models generalize to the GP model if $\k=1$.
+
+\subsection{Return Levels}
+
+\subsection{Hypothesis testing}
+
+\section{Simulation}
 
 \section{Shortcomings}
 \begin{enumerate}
-    \item No checking that the data is approximately stationary or not
-    \item no prediction offered
+    \item No checking that the data is approximately stationary (not sim)
+    \item No prediction offered (or back testing)
+\end{enumerate}
+
+\section{Questions}
+\begin{enumerate}
+    \item Do I need to explain the convergence of the derivatives of the limiting function (Pickands 1975)
+    \item How much of the report should be summary (not of results but theory). Some of the theory I read seems extraneous and would not be *strictly* necessary to get the method across. (Probability integral transform, proof the transformed rv has a tail index of $\xi$, deriving the form of the likelihood for EGPs, composition of parameter spaces when building rvs )
 \end{enumerate}
 \end{document}
