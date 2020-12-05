@@ -438,7 +438,7 @@ Let $X_1, X_2, \hdots$ be a sequence of i.i.d random variables having a marginal
 This probability can be seen as calculating the probability that we exceed threshold $u$ by $y$ given/knowing that we exceed threshold $u$. Of course, if $F$ is known, then so is the distribution of the threshold exceedences. As with $F^n$, we aim to have an asymptotic approximation for $P(X>u+y|X>u)$ as $u \rightarrow \infty$.
 \begin{theorem}
 Let $X_1,X_2,\hdots$ be a sequence of i.i.d. random variables with distribution function $F$ such that $F\in MDA(GEV(\mu,\sigma, \xi))$. Then, for large enough $u$,
-\[F_u(y)= P(X-u>y|X>u)= 1-\bigg(1+\frac{\xi y}{\sigma^*} \bigg)^{-1/\xi}\]
+\[F_u(y)= P(X-u\leq y|X>u)= 1-\bigg(1+\frac{\xi y}{\sigma^*} \bigg)^{-1/\xi}\]
 where $y>0$, $1+\frac{\xi y}{\sigma^*} >0$, and $\sigma^*= \sigma+ \xi(u-\mu)$.
 This limiting distribution corresponds to the generalized Pareto distribution. Below are the summary statistics for a $X\sim GP(\sigma, \xi)$ rv:
 \begin{align*}

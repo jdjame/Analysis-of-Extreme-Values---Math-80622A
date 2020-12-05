@@ -1,4 +1,4 @@
-\documentclass{article}
+ \documentclass{article}
 
 %install your packages here 
 \usepackage[utf8]{inputenc}
@@ -79,9 +79,9 @@ In practice, when we fit data to the GP distribution, we focus only on fitting t
 However, problems arise when fitting a GP distribution. Picking the threshold $u$ to calculate exceedences over is not a simple problem. Usually, we use the smallest value of $u$ for which the modified scale $\sigma^*=\sigma_u-\xi u$ stabilizes. In many cases, such a value for $u$ might not exist. This leads to estimates being unstable over different thresholds. The aim of this paper is to construct parametric models over exceedences that are more flexible than the standard generalized Pareto distribution. This is done by creating a class of Extended Generalized Pareto models(EGP).
 
 \section{Extension to the GP Model}
-Let $F(x;\lam)$ be the cdf of the GP function where $\lam=(\sigma, \xi)$. In this paper, models having a cdf of the form $G(x;\k,\lam)$ are constructed where $\k>0$ is a shape parameter that induces skewness into the standard GP distribution but retains $\xi$ as the tail index. Additionally, These cdfs are made to generalize to the GP as there exists a $\k^*$ such that $G(x;\k^*,\lam)= F(x;\lam)$.
+Let $F_X(x;\lam)$ be the cdf of the GP function where $\lam=(\sigma, \xi)$. In this paper, models having a cdf of the form $G(x;\k,\lam)$ are constructed where $\k>0$ is a shape parameter that induces skewness into the standard GP distribution but retains $\xi$ as the tail index. Additionally, These cdfs are made to generalize to the GP as there exists a $\k^*$ such that $G(x;\k^*,\lam)= F(x;\lam)$.
 \subsection{Construction}
-Constructions in of the extended Generalized Pareto Distribution make use of a modification of the probability integral transform. Recall that if $V\sim Unif(0,1)$ then the random variable defined as $W=F_X^{-1}(V;\lam)$ will follow a generalized Pareto distribution with parameters $\lam$. In the purposes of this construction, the restriction on $V$ is relaxed from uniform to a random variable with support on the unit interval. In fact, $V$ is chosen such that the 
+Constructions in of the extended Generalized Pareto Distribution make use of a modification of the probability integral transform. Recall that if $V\sim Unif(0,1)$ then the random variable defined as $W=F_X^{-1}(V;\lam)$ will follow a generalized Pareto distribution with parameters $\lam$. In the purposes of this construction, the restriction on $V$ is relaxed from uniform to a random variable with support on the unit interval. In fact, $V$ is chosen to have support on $[0,1]$ and such that the resulting random variable defined as $W=F^{-1}(V,\lam)$ has the same tail index ($\xi$) as the initial random excesses distribution $X-u$ (reference theorem from paper).
 %todo: write about probability integral transform and how it makes this easier
 
 \subsection{Models}
@@ -98,23 +98,23 @@ with these defined and available to us, we
     \end{cases}\]
     
     \item [2.][EGP2($\k, \sigma,\xi)$] With $F_V(v,\thet)=1-\gamma\{-\log(1-v),\k\}$, and $\thet= \k$,  $W=F^{-1}(V,\lam)$ has the following pdf
-    \[g(x,\lam,\thet= \begin{cases}\frac{\sigma^{-1}}{\Gamma(\k)}\{\xi^{-1}\log(1+\xi x/\sigma)_+\}^{\k-1} (1+\xi x/\sigma)_+^{-1/\xi-1} & \xi\neq 0\\\\
+    \[g(x,\lam,\thet)= \begin{cases}\frac{\sigma^{-1}}{\Gamma(\k)}\{\xi^{-1}\log(1+\xi x/\sigma)_+\}^{\k-1} (1+\xi x/\sigma)_+^{-1/\xi-1} & \xi\neq 0\\\\
     \frac{\sigma^{-1}}{\Gamma(\k)}x^{\k-1}e^{-x/\sigma} & \xi\rightarrow 0
     \end{cases}\]
     \item [3.] [EGP3($\k, \sigma,\xi)$] With $F_V(v;\thet)= v^\k$, and $\thet= \k$, $W=F^{-1}(V,\lam)$ has the following pdf
-    \[g(x,\lam,\thet= \begin{cases} \frac{\k}{\sigma}\{1-(1+\xi x/\sigma)^{\k-1}(1+\xi x/\sigma)_+^{-1/\xi-1}\} & \xi \neq 0\\\\
+    \[g(x,\lam,\thet)= \begin{cases} \frac{\k}{\sigma}\{1-(1+\xi x/\sigma)^{\k-1}(1+\xi x/\sigma)_+^{-1/\xi-1}\} & \xi \neq 0\\\\
     \frac{\k}{\sigma}(1-e^{-x/\sigma})^{\k-1}e^{-x/\sigma} & \xi \rightarrow 0
     \end{cases}\]
 \end{enumerate}
 
 \subsection{Model Discussion}
-For all these models, $\k>0$ us a shape parameters that adds more flexibility in the main body and does not alter the tail behavior (this is a result from Theorem 1 and Corrolary 1). Additionally, all the EGP models generalize to the GP model if $\k=1$.
+For all these models, $\k>0$ us a shape parameters that adds more flexibility in the main body and does not alter the tail behavior (this is a result from Theorem 1 and Corrolary 1). Additionally, all the EGP models generalize to the GP model if $\k=1$. Now that we have defined these extended models, we can use them to fit a exceedences over a threshold instead of the usual GP model. 
 
-\subsection{Return Levels}
+%\subsection{Likelihoods}
+%\subsection{Return Levels}
+%\subsection{Hypothesis testing}
 
-\subsection{Hypothesis testing}
-
-\section{Simulation}
+%\section{Simulation}
 
 \section{Shortcomings}
 \begin{enumerate}
@@ -124,7 +124,11 @@ For all these models, $\k>0$ us a shape parameters that adds more flexibility in
 
 \section{Questions}
 \begin{enumerate}
-    \item Do I need to explain the convergence of the derivatives of the limiting function (Pickands 1975)
-    \item How much of the report should be summary (not of results but theory). Some of the theory I read seems extraneous and would not be *strictly* necessary to get the method across. (Probability integral transform, proof the transformed rv has a tail index of $\xi$, deriving the form of the likelihood for EGPs, composition of parameter spaces when building rvs )
+    \item Do I need to explain the convergence of the derivatives of the limiting function (Pickands 1975) [you can deliver the result and specify when it holds]
+    
+    \item How much of the report should be summary (not of results but theory). Some of the theory I read seems extraneous and would not be *strictly* necessary to get the method across. (Probability integral transform, proof the transformed rv has a tail index of $\xi$, deriving the form of the likelihood for EGPs, composition of parameter spaces when building rvs )  [No summary just convey the information and your comments, reproduction, new data, etc]
+    \item Can I exclude things from the report? (penultimate convergence Smith 1987)
+    \item Hard time finding how to calculate the integral in the beta and gamma functions should it be done analytically beforehand?
+    \item what us $V_\delta$ in MEV?
 \end{enumerate}
 \end{document}
